@@ -1,60 +1,86 @@
-You are working in a new Git repo that contains 00_SYSTEM/README.md describing the “LLM-Readable UDO Corpus” project.
+# LLM-Readable UDO Corpus
 
-TASK (Phase 0 only): Build a robust, repeatable downloader that archives official-ish UDO PDFs from Municode (library.municode.com) with provenance.
+## Goal
+Make municipal Unified Development Ordinances (UDOs) and related ordinances easier for LLMs to read, search, cite, and reason over—so LLMs can help residents/homeowners/small developers do **first-pass plausibility checks** on housing-abundance ideas (ADUs, missing middle, cottage developments, gradual self-build, factory-built/manufactured housing, etc.).
 
-GOAL:
-Given a Municode city landing page URL (example: https://library.municode.com/in/bloomington),
-the tool should:
-1) Open the page in a real browser context (JS enabled).
-2) Find and click the “Download Publication PDF” (or equivalent “Download PDF”) action.
-   - If the button is not visible, try opening the site’s print/export menu if present.
-3) Capture the resulting PDF download and save it to:
-   sources/<town_slug>/<YYYY-MM-DD>/udo.pdf
-4) Write a provenance file:
-   sources/<town_slug>/<YYYY-MM-DD>/source.json
-   containing:
-   - town_display_name (string)
-   - town_slug (string)
-   - retrieved_at_local (America/Indiana/Indianapolis ISO string)
-   - source_url (the input URL)
-   - download_url (final URL if discoverable; else null)
-   - download_method (string description of clicks taken)
-   - user_agent (string)
-   - playwright_browser (chromium/firefox/webkit)
-   - notes (include “Not legal advice. Verify against official sources.”)
-5) Compute SHA-256 of the saved PDF and write:
-   sources/<town_slug>/<YYYY-MM-DD>/SHA256SUMS.txt
-6) (Optional but recommended) Save a screenshot for provenance:
-   sources/<town_slug>/<YYYY-MM-DD>/source_page.png
-   capturing the page state right before download click.
+This project does **not** replace official sources. It is a navigation + reasoning aid designed to lower the cost of exploring ideas until the expected value is high enough to:
+- manually confirm the relevant provisions in the official PDF,
+- contact planning staff,
+- consult professionals,
+- and/or engage city council.
 
-IMPLEMENTATION CONSTRAINTS:
-- Use Playwright (prefer Node/TypeScript). If repo has no Node setup, create it.
-- Provide a single command:
-  npm run grab -- --url "<municode city url>"
-  Optionally also support:
-  npm run grab -- --file towns.txt
-  where towns.txt contains one URL per line.
-- Create a config file for defaults (timezone, output root, browser type, headless=true by default).
-- Be careful about OS-native print dialogs: do NOT rely on OS print; use site PDF download link.
-- Be resilient: add retries and clear error messages if the site flow changes.
-- Do not scrape HTML content; this is only PDF capture + provenance for archival.
+## Intended “Cautious but Encouraged” Use Model
+1. Use this corpus for a first pass:
+   - “Is this obviously prohibited?”
+   - “Which 3–8 sections govern it?”
+   - “What are the likely deal-killers?”
+2. Confirm the cited sections in the official PDF (source link + page numbers).
+3. Only then proceed to staff/professional consultation or political action.
 
-DELIVERABLES:
-- package.json with scripts
-- src/grab_municode_pdf.ts (or similar)
-- src/utils/{slugify.ts,time.ts,hash.ts,fs.ts}
-- README_USAGE.md explaining how to run it and the expected directory output
-- A small “smoke test” mode: if run with --dry-run, it should navigate and report what it would click without saving.
+**Not legal advice. Always verify against official sources before acting.**
 
-QUALITY BAR:
-- Code should be readable, documented, and robust to minor UI variation.
-- Log each step (navigate, locate download control, click, wait for download, save, hash, write metadata).
-- If the download button is not found, print suggestions (e.g., “Try the city root page rather than a specific nodeId page”).
+## What we store (source-of-truth artifacts)
+For each town and retrieval date:
+- The official PDF(s)
+- A source metadata record: retrieval date/time, official URL(s), and PDF hash
 
-FIRST STEP:
-Inspect the repo, read 00_SYSTEM/README.md, then scaffold Node/TS + Playwright, then implement the downloader.
+Directory example:
+- `sources/<town>/<YYYY-MM-DD>/udo.pdf`
+- `sources/<town>/<YYYY-MM-DD>/source.json`
 
-After implementation, output:
-- a short summary of files created
-- how to run one example command for Bloomington.
+## What we generate (LLM-friendly artifacts)
+Primary output: Markdown files with stable citation headers.
+
+Each section file begins with metadata (frontmatter or header), e.g.:
+
+Town: Bloomington, IN  
+Code: Unified Development Ordinance  
+Section: 20.03.030(g)(5)  
+Title: Accessory Dwelling Units  
+As of: 2026-02-21  
+Source PDF: <official link>  
+Page(s): 134–138  
+Status: Verbatim excerpt (authoritative text below)
+
+Then the verbatim text with numbering and indentation preserved.
+
+### “Inferred” helpers (guard-railed)
+We may include **explicitly labeled** helper metadata that is not law:
+- `inferred_tags`
+- `inferred_applicable_zones`
+- `inferred_key_constraints` (e.g., max size, owner-occupancy)
+These must never be confused with the ordinance text.
+
+## Minimum viable per-town packet
+- `00_SYSTEM/README_PRECEDENCE.md` (how conflicts resolve, if known)
+- `00_SYSTEM/definitions.md` (definitions chapter or key defs)
+- `00_SYSTEM/index_with_inferences.json` (manifest)
+- `02_SPECIFIC_USES/...ADU...md`
+- `...` housing index bundle (see below)
+
+## Housing Abundance Index (curated subset)
+Each town should have a curated set of files that covers the typical “incremental housing” questions:
+- ADUs (definition + standards + referenced design/foundation rules)
+- duplex/triplex/fourplex or missing-middle provisions
+- cottage development / tiny homes
+- manufactured/mobile housing definitions and constraints
+- use tables (prefer CSV/JSON over scraped markdown tables)
+- dimensional standards (setbacks/height/coverage; JSON if feasible)
+- parking and any exemptions
+- nonconforming rules relevant to conversions
+- administrative process basics (permits, inspections, affidavits)
+
+## Non-goals (for now)
+- We are not publishing professional legal interpretations.
+- We are not guaranteeing currency; we provide timestamps + source links + hashes.
+
+## Roadmap
+Phase 0: bulk PDF archival (town-by-town)  
+Phase 1: searchable text + manifest  
+Phase 2: section-level markdown + housing index  
+Phase 3: structured tables (CSV/JSON) + cross-reference graph + stale checks
+
+## Contribution norms
+- Preserve verbatim text exactly.
+- Keep all “inferred” content clearly labeled and separate.
+- Always include source link, retrieval date, and page numbers.
