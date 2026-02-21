@@ -12,11 +12,13 @@
 - Better chapter-specific filtering than regex heuristics
 - Optional OCR pass for low-text pages
 - Evaluation harness to score retrieval citation hit-rate
+- ADU-focused table structuring slice (`phase2_adu_tables`) for use/parking/dimensional grounding
 
 ## Later (Phase 3)
 
 - Cross-source alignment (city PDF vs Municode by section)
 - Conflict flagging with side-by-side diffs
+- Broader table extraction coverage across all chapters and towns
 - Export formats for downstream RAG stores (JSONL, parquet)
 - Scheduled automation and monitoring
 

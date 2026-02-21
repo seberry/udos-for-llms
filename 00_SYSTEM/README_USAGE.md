@@ -4,6 +4,7 @@ This tool automates archival download of Municode publication PDFs with provenan
 
 For operations/maintenance workflow, see `00_SYSTEM/docs/OPERATIONS.md`.
 For field-level schema details, see `00_SYSTEM/docs/DATA_CONTRACTS.md`.
+For ADU table + retrieval scoring workflow, see `00_SYSTEM/docs/ADU_EVAL_WORKFLOW.md`.
 
 ## Setup
 
@@ -61,6 +62,26 @@ Optional flags:
 
 - `--browser chromium|firefox|webkit`
 - `--headed` (overrides default headless mode)
+
+## ADU usefulness workflow (post-Phase 1)
+
+Build corpus:
+
+```bash
+npm run build:corpus -- --town-slug bloomington --source-type city_pdf
+```
+
+Extract ADU-relevant tables from Phase 1 page text:
+
+```bash
+npm run build:adu-tables -- --town-slug bloomington --source-type city_pdf
+```
+
+Score ADU retrieval + citation grounding:
+
+```bash
+npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
+```
 
 ## Config
 

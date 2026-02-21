@@ -13,3 +13,5 @@ Core commands:
 - `npm run grab -- --url "<municode city url>"`
 - `npm run grab:both -- --town-slug <slug> --municode-url <url> --pdf-url <url>`
 - `npm run build:corpus -- --town-slug <slug> --source-type city_pdf|municode`
+- `npm run build:adu-tables -- --town-slug <slug> --source-type city_pdf|municode`
+- `npm run eval:adu -- --town-slug <slug> --source-type city_pdf|municode`

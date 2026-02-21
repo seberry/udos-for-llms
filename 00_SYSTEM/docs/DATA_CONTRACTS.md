@@ -72,6 +72,61 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase1/
 - `chunks_all` means all chunks from the selected `source_type` snapshot, not all sources combined.
 - `chunks_chapter20` is heuristic and may include false positives when references to `20.x` appear outside Chapter 20 context.
 
+## Phase 2 ADU Table Artifacts
+
+```text
+corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/
+  table_blocks.jsonl
+  adu_tables.json
+  report.json
+```
+
+### `table_blocks.jsonl` / `adu_tables.json` table schema
+- `table_id: string`
+- `table_ref: string` (for example `03-1`)
+- `table_title: string`
+- `category: "use_permissions" | "dimensional_standards" | "parking_loading" | "accessory_structures" | "other"`
+- `relevance_score: number`
+- `page_start: number`
+- `page_end: number`
+- `rows: [{ row_index, row_text, columns[] }]`
+- `column_count_guess: number`
+- `chunk_ids: string[]` (overlapping Phase 1 chunk IDs for grounding)
+- `section_guess: string | null`
+- `town_slug: string`
+- `source_type: "city_pdf" | "municode"`
+- `source_url: string | null`
+- `source_sha256: string | null`
+- `snapshot_date: string`
+
+## Phase 2 ADU Evaluation Artifacts
+
+```text
+corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
+  eval_set.json
+  retrieval_results.jsonl
+  scored_report.json
+```
+
+### `retrieval_results.jsonl` row schema
+- `id: string`
+- `question: string`
+- `hit: boolean`
+- `expected_doc_count: number`
+- `top_k: number`
+- `citation_quality_avg: number`
+- `top_results[]`:
+  - `rank: number`
+  - `doc_id: string`
+  - `kind: "chunk" | "table_row"`
+  - `score: number`
+  - `page_start: number`
+  - `page_end: number`
+  - `chunk_id: string | null`
+  - `table_id: string | null`
+  - `table_ref: string | null`
+  - `grounding_score: number`
+
 ## Compatibility Policy
 
 - Additive fields are preferred over breaking changes.

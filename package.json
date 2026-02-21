@@ -7,6 +7,8 @@
     "grab": "tsx src/grab_municode_pdf.ts",
     "grab:both": "tsx src/grab_dual_sources.ts",
     "build:corpus": "tsx src/build_llm_corpus.ts",
+    "build:adu-tables": "tsx src/build_adu_tables.ts",
+    "eval:adu": "tsx src/eval_adu_retrieval.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

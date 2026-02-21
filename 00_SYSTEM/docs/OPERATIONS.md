@@ -13,12 +13,22 @@ npm run grab:both -- --file towns.dual.txt
 npm run build:corpus -- --town-slug bloomington --source-type city_pdf
 npm run build:corpus -- --town-slug bloomington --source-type municode
 ```
-3. Check reports:
+3. Build ADU-focused structured table artifacts (Bloomington usefulness track):
+```bash
+npm run build:adu-tables -- --town-slug bloomington --source-type city_pdf
+```
+4. Run ADU retrieval + citation grounding eval:
+```bash
+npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
+```
+5. Check reports:
 - `low_text_pages` spikes
 - unexpectedly low `chunk_count`
 - extraction failures in logs
-4. Log differences from previous snapshot (`content_changed_since_previous`).
-5. Update QA evaluation set if major ordinance changes landed.
+- `phase2_adu_tables/report.json` for table extraction yield
+- `phase2_adu_eval/scored_report.json` for retrieval hit-rate and citation grounding quality
+6. Log differences from previous snapshot (`content_changed_since_previous`).
+7. Update QA evaluation set if major ordinance changes landed.
 
 ## Before Merging Changes
 
