@@ -6,6 +6,7 @@
   "scripts": {
     "grab": "tsx src/grab_municode_pdf.ts",
     "grab:both": "tsx src/grab_dual_sources.ts",
+    "build:corpus": "tsx src/build_llm_corpus.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
