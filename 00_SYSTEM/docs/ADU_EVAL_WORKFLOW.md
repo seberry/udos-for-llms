@@ -30,6 +30,12 @@ Run ADU retrieval/citation evaluation:
 npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
 ```
 
+Optional gold-labeled scoring:
+
+```bash
+npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --gold-file corpus/bloomington/2026-02-21/city_pdf/phase2_adu_eval/gold_citations.json
+```
+
 ## Output folders
 
 ```text
@@ -46,13 +52,16 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
 - Scoring reports:
   - retrieval hit/miss
   - citation grounding quality (page/chunk/provenance field completeness)
+  - gold-based ranking metrics when `gold_citations.json` exists (`precision@k`, `MRR@k`, `nDCG@k`)
 
 ## Human Gold-Check Pass (recommended next)
 
 For each key ADU question:
 1. Open `phase2_adu_eval/retrieval_results.jsonl`.
 2. Review top results and mark whether the cited chunk/page actually answers the question.
-3. Record corrections in a local gold file (question ID + accepted `chunk_id`/page anchor).
+3. Copy `phase2_adu_eval/gold_citations.template.json` to `phase2_adu_eval/gold_citations.json`.
+4. Fill `relevant_doc_ids` for each question with accepted `doc_id` values.
+5. Re-run `eval:adu` with `--gold-file` to compute ranking metrics.
 
 Target first set:
 - ADU use permission location

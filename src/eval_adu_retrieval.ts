@@ -10,6 +10,8 @@ interface CliOptions {
   date?: string;
   outputRoot: string;
   topK: number;
+  goldFile?: string;
+  writeGoldTemplate: boolean;
 }
 
 interface ChunkRecord {
@@ -82,6 +84,18 @@ interface ScoredDoc extends RetrievalDocument {
   score: number;
 }
 
+interface GoldItem {
+  id: string;
+  relevant_doc_ids: string[];
+}
+
+interface GoldFile {
+  town_slug: string;
+  source_type: SourceType;
+  snapshot_date: string;
+  items: GoldItem[];
+}
+
 function logStep(message: string): void {
   console.log(`[phase2-eval] ${message}`);
 }
@@ -91,7 +105,8 @@ function parseArgs(argv: string[]): CliOptions {
     townSlug: "bloomington",
     sourceType: "city_pdf",
     outputRoot: "corpus",
-    topK: 6
+    topK: 6,
+    writeGoldTemplate: true
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -115,6 +130,11 @@ function parseArgs(argv: string[]): CliOptions {
       const parsed = Number(argv[i + 1]);
       if (Number.isFinite(parsed) && parsed >= 1 && parsed <= 20) opts.topK = parsed;
       i += 1;
+    } else if (arg === "--gold-file") {
+      opts.goldFile = argv[i + 1];
+      i += 1;
+    } else if (arg === "--no-gold-template") {
+      opts.writeGoldTemplate = false;
     }
   }
 
@@ -313,6 +333,49 @@ function groundingScore(doc: RetrievalDocument): number {
   return score;
 }
 
+async function loadGoldMap(filePath: string): Promise<Map<string, Set<string>>> {
+  const parsed = JSON.parse(await readFile(filePath, "utf8")) as GoldFile;
+  const map = new Map<string, Set<string>>();
+  for (const item of parsed.items ?? []) {
+    map.set(item.id, new Set(item.relevant_doc_ids ?? []));
+  }
+  return map;
+}
+
+function precisionAtK(topDocIds: string[], gold: Set<string>, k: number): number {
+  if (k <= 0) return 0;
+  let relevant = 0;
+  for (let i = 0; i < Math.min(k, topDocIds.length); i += 1) {
+    if (gold.has(topDocIds[i])) relevant += 1;
+  }
+  return relevant / k;
+}
+
+function mrr(topDocIds: string[], gold: Set<string>, k: number): number {
+  for (let i = 0; i < Math.min(k, topDocIds.length); i += 1) {
+    if (gold.has(topDocIds[i])) return 1 / (i + 1);
+  }
+  return 0;
+}
+
+function ndcgAtK(topDocIds: string[], gold: Set<string>, k: number): number {
+  let dcg = 0;
+  const limit = Math.min(k, topDocIds.length);
+  for (let i = 0; i < limit; i += 1) {
+    const rel = gold.has(topDocIds[i]) ? 1 : 0;
+    if (rel > 0) {
+      dcg += 1 / Math.log2(i + 2);
+    }
+  }
+  const idealRelevant = Math.min(k, gold.size);
+  if (idealRelevant === 0) return 0;
+  let idcg = 0;
+  for (let i = 0; i < idealRelevant; i += 1) {
+    idcg += 1 / Math.log2(i + 2);
+  }
+  return idcg === 0 ? 0 : dcg / idcg;
+}
+
 async function main(): Promise<void> {
   const opts = parseArgs(process.argv.slice(2));
   const snapshotDate = await resolveSnapshotDate(opts.townSlug, opts.date);
@@ -325,6 +388,8 @@ async function main(): Promise<void> {
     "phase2_adu_tables"
   );
   const outDir = resolveFromCwd(opts.outputRoot, opts.townSlug, snapshotDate, opts.sourceType, "phase2_adu_eval");
+  const goldPath =
+    opts.goldFile !== undefined ? resolveFromCwd(opts.goldFile) : path.join(outDir, "gold_citations.json");
 
   logStep(`Using Phase 1 input: ${phase1Dir}`);
   const chunks = await readJsonlFile<ChunkRecord>(path.join(phase1Dir, "chunks_all.jsonl"));
@@ -345,6 +410,16 @@ async function main(): Promise<void> {
     throw new Error("No retrieval documents available for evaluation.");
   }
 
+  let goldMap = new Map<string, Set<string>>();
+  let goldLoaded = false;
+  try {
+    goldMap = await loadGoldMap(goldPath);
+    goldLoaded = true;
+    logStep(`Loaded gold citations from ${goldPath}`);
+  } catch {
+    logStep(`No usable gold file at ${goldPath}. Gold metrics will be null.`);
+  }
+
   const evalItems = buildEvalItems();
   const idf = buildIdf(docs);
   const results: Array<{
@@ -354,6 +429,10 @@ async function main(): Promise<void> {
     expected_doc_count: number;
     top_k: number;
     citation_quality_avg: number;
+    gold_relevant_count: number;
+    precision_at_k: number | null;
+    mrr_at_k: number | null;
+    ndcg_at_k: number | null;
     top_results: Array<{
       rank: number;
       doc_id: string;
@@ -365,6 +444,7 @@ async function main(): Promise<void> {
       table_id: string | null;
       table_ref: string | null;
       grounding_score: number;
+      is_gold_relevant: boolean | null;
     }>;
   }> = [];
 
@@ -383,6 +463,12 @@ async function main(): Promise<void> {
         ? Number((top.reduce((sum, doc) => sum + groundingScore(doc), 0) / top.length).toFixed(3))
         : 0;
 
+    const goldRelevant = goldMap.get(item.id) ?? new Set<string>();
+    const topDocIds = top.map((doc) => doc.doc_id);
+    const precision = goldRelevant.size > 0 ? precisionAtK(topDocIds, goldRelevant, opts.topK) : null;
+    const mrrValue = goldRelevant.size > 0 ? mrr(topDocIds, goldRelevant, opts.topK) : null;
+    const ndcgValue = goldRelevant.size > 0 ? ndcgAtK(topDocIds, goldRelevant, opts.topK) : null;
+
     results.push({
       id: item.id,
       question: item.question,
@@ -390,6 +476,10 @@ async function main(): Promise<void> {
       expected_doc_count: expectedDocIds.size,
       top_k: opts.topK,
       citation_quality_avg: qualityAvg,
+      gold_relevant_count: goldRelevant.size,
+      precision_at_k: precision !== null ? Number(precision.toFixed(4)) : null,
+      mrr_at_k: mrrValue !== null ? Number(mrrValue.toFixed(4)) : null,
+      ndcg_at_k: ndcgValue !== null ? Number(ndcgValue.toFixed(4)) : null,
       top_results: top.map((doc, index) => ({
         rank: index + 1,
         doc_id: doc.doc_id,
@@ -400,7 +490,8 @@ async function main(): Promise<void> {
         chunk_id: doc.chunk_id,
         table_id: doc.table_id,
         table_ref: doc.table_ref,
-        grounding_score: Number(groundingScore(doc).toFixed(3))
+        grounding_score: Number(groundingScore(doc).toFixed(3)),
+        is_gold_relevant: goldRelevant.size > 0 ? goldRelevant.has(doc.doc_id) : null
       }))
     });
   }
@@ -410,6 +501,26 @@ async function main(): Promise<void> {
     results.length > 0
       ? Number((results.reduce((sum, result) => sum + result.citation_quality_avg, 0) / results.length).toFixed(3))
       : 0;
+
+  const goldEligible = results.filter((result) => result.gold_relevant_count > 0);
+  const meanPrecisionAtK =
+    goldEligible.length > 0
+      ? Number(
+          (
+            goldEligible.reduce((sum, result) => sum + (result.precision_at_k ?? 0), 0) / goldEligible.length
+          ).toFixed(4)
+        )
+      : null;
+  const meanMrrAtK =
+    goldEligible.length > 0
+      ? Number((goldEligible.reduce((sum, result) => sum + (result.mrr_at_k ?? 0), 0) / goldEligible.length).toFixed(4))
+      : null;
+  const meanNdcgAtK =
+    goldEligible.length > 0
+      ? Number(
+          (goldEligible.reduce((sum, result) => sum + (result.ndcg_at_k ?? 0), 0) / goldEligible.length).toFixed(4)
+        )
+      : null;
 
   await ensureDir(outDir);
   await writeJson(path.join(outDir, "eval_set.json"), {
@@ -425,6 +536,23 @@ async function main(): Promise<void> {
     results.map((result) => JSON.stringify(result)).join("\n") + "\n",
     "utf8"
   );
+
+  if (opts.writeGoldTemplate) {
+    await writeJson(path.join(outDir, "gold_citations.template.json"), {
+      town_slug: opts.townSlug,
+      source_type: opts.sourceType,
+      snapshot_date: snapshotDate,
+      instructions:
+        "For each item, copy accepted doc_ids from candidate_doc_ids into relevant_doc_ids after human verification.",
+      items: results.map((result) => ({
+        id: result.id,
+        question: result.question,
+        relevant_doc_ids: [],
+        candidate_doc_ids: result.top_results.map((top) => top.doc_id)
+      }))
+    });
+  }
+
   await writeJson(path.join(outDir, "scored_report.json"), {
     town_slug: opts.townSlug,
     source_type: opts.sourceType,
@@ -436,11 +564,16 @@ async function main(): Promise<void> {
     retrieval_hits: hitCount,
     retrieval_hit_rate: Number((hitCount / results.length).toFixed(3)),
     citation_quality_avg: citationQualityAvg,
-    top_k: opts.topK
+    top_k: opts.topK,
+    gold_file: goldLoaded ? goldPath : null,
+    gold_questions_labeled: goldEligible.length,
+    mean_precision_at_k: meanPrecisionAtK,
+    mean_mrr_at_k: meanMrrAtK,
+    mean_ndcg_at_k: meanNdcgAtK
   });
 
   logStep(
-    `Done. questions=${results.length}, hit_rate=${Number((hitCount / results.length).toFixed(3))}, citation_quality_avg=${citationQualityAvg}`
+    `Done. questions=${results.length}, hit_rate=${Number((hitCount / results.length).toFixed(3))}, citation_quality_avg=${citationQualityAvg}, gold_labeled=${goldEligible.length}`
   );
 }
 

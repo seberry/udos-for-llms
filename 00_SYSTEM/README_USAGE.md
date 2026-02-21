@@ -83,6 +83,12 @@ Score ADU retrieval + citation grounding:
 npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
 ```
 
+After human review, run with gold labels:
+
+```bash
+npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --gold-file corpus/bloomington/2026-02-21/city_pdf/phase2_adu_eval/gold_citations.json
+```
+
 ## Config
 
 Defaults are in `grab.config.json`:

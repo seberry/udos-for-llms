@@ -104,6 +104,8 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/
 ```text
 corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
   eval_set.json
+  gold_citations.template.json
+  gold_citations.json            # optional, human-labeled
   retrieval_results.jsonl
   scored_report.json
 ```
@@ -115,6 +117,10 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
 - `expected_doc_count: number`
 - `top_k: number`
 - `citation_quality_avg: number`
+- `gold_relevant_count: number`
+- `precision_at_k: number | null`
+- `mrr_at_k: number | null`
+- `ndcg_at_k: number | null`
 - `top_results[]`:
   - `rank: number`
   - `doc_id: string`
@@ -126,6 +132,15 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
   - `table_id: string | null`
   - `table_ref: string | null`
   - `grounding_score: number`
+  - `is_gold_relevant: boolean | null`
+
+### `gold_citations.json` schema (optional input)
+- `town_slug: string`
+- `source_type: "city_pdf" | "municode"`
+- `snapshot_date: string`
+- `items[]`:
+  - `id: string` (matches eval item id)
+  - `relevant_doc_ids: string[]` (approved citation doc IDs)
 
 ## Compatibility Policy
 

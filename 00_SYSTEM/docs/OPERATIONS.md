@@ -21,12 +21,17 @@ npm run build:adu-tables -- --town-slug bloomington --source-type city_pdf
 ```bash
 npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
 ```
+4a. If human-labeled gold citations are available, run gold-scored eval:
+```bash
+npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --gold-file corpus/bloomington/<YYYY-MM-DD>/city_pdf/phase2_adu_eval/gold_citations.json
+```
 5. Check reports:
 - `low_text_pages` spikes
 - unexpectedly low `chunk_count`
 - extraction failures in logs
 - `phase2_adu_tables/report.json` for table extraction yield
 - `phase2_adu_eval/scored_report.json` for retrieval hit-rate and citation grounding quality
+- `mean_precision_at_k`, `mean_mrr_at_k`, `mean_ndcg_at_k` in `phase2_adu_eval/scored_report.json` when gold labels exist
 6. Log differences from previous snapshot (`content_changed_since_previous`).
 7. Update QA evaluation set if major ordinance changes landed.
 
