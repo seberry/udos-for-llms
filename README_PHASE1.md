@@ -2,6 +2,8 @@
 
 This step transforms archived PDFs into citation-ready JSONL chunks for retrieval and QA.
 
+Detailed schema/semantics are in `docs/DATA_CONTRACTS.md`.
+
 ## Command
 
 ```bash
@@ -38,6 +40,8 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase1/
   qa_eval_template.json
   report.json
 ```
+
+`chunks_all.jsonl` means all chunks for the selected `--source-type`, not a cross-source merge.
 
 ## Notes
 

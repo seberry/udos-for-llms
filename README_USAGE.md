@@ -2,6 +2,9 @@
 
 This tool automates archival download of Municode publication PDFs with provenance metadata.
 
+For operations/maintenance workflow, see `docs/OPERATIONS.md`.
+For field-level schema details, see `docs/DATA_CONTRACTS.md`.
+
 ## Setup
 
 ```bash
