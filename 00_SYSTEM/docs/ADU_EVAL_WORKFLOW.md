@@ -46,3 +46,17 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_eval/
 - Scoring reports:
   - retrieval hit/miss
   - citation grounding quality (page/chunk/provenance field completeness)
+
+## Human Gold-Check Pass (recommended next)
+
+For each key ADU question:
+1. Open `phase2_adu_eval/retrieval_results.jsonl`.
+2. Review top results and mark whether the cited chunk/page actually answers the question.
+3. Record corrections in a local gold file (question ID + accepted `chunk_id`/page anchor).
+
+Target first set:
+- ADU use permission location
+- attached ADU size/height constraints
+- detached ADU setbacks/height
+- owner-occupancy affidavit/recording requirements
+- ADU-relevant parking requirements

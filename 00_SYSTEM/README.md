@@ -77,8 +77,8 @@ Each town should have a curated set of files that covers the typical “incremen
 ## Roadmap
 Phase 0: bulk PDF archival (town-by-town)  
 Phase 1: searchable text + manifest  
-Phase 2: section-level markdown + housing index  
-Phase 3: structured tables (CSV/JSON) + cross-reference graph + stale checks
+Phase 2 (current implemented slice): ADU-focused structured tables + retrieval/citation scoring  
+Phase 3: broader structured tables (all chapters/towns) + cross-reference graph + stale checks
 
 ## Contribution norms
 - Preserve verbatim text exactly.

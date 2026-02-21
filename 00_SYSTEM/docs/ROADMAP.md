@@ -5,14 +5,15 @@
 - Phase 0: Municode archival downloader with provenance
 - Phase 0.5: Dual-source archival (Municode + direct city PDF)
 - Phase 1: Text extraction, normalization, chunking, and Chapter 20 subset
+- Phase 2A: ADU-focused table structuring (`phase2_adu_tables`) and retrieval/citation scoring (`phase2_adu_eval`)
 
-## Next (Phase 2)
+## Next (Phase 2B)
 
 - Section boundary detection with stronger chapter segmentation
 - Better chapter-specific filtering than regex heuristics
 - Optional OCR pass for low-text pages
-- Evaluation harness to score retrieval citation hit-rate
-- ADU-focused table structuring slice (`phase2_adu_tables`) for use/parking/dimensional grounding
+- Human-validated gold citation set for ADU eval prompts
+- Stronger retrieval metrics (nDCG/MRR and citation precision@k)
 
 ## Later (Phase 3)
 

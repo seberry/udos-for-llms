@@ -3,6 +3,7 @@
 This step transforms archived PDFs into citation-ready JSONL chunks for retrieval and QA.
 
 Detailed schema/semantics are in `00_SYSTEM/docs/DATA_CONTRACTS.md`.
+ADU table extraction and retrieval scoring built on top of Phase 1 are documented in `00_SYSTEM/docs/ADU_EVAL_WORKFLOW.md`.
 
 ## Command
 
