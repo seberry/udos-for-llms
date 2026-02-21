@@ -1,0 +1,10 @@
+{
+  "timezone": "America/Indiana/Indianapolis",
+  "outputRoot": "sources",
+  "browser": "chromium",
+  "headless": true,
+  "saveScreenshot": true,
+  "navigationTimeoutMs": 60000,
+  "downloadTimeoutMs": 45000,
+  "maxAttempts": 2
+}

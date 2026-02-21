@@ -1,0 +1,5 @@
+# JSONL format
+{"town_slug":"bloomington","town_name":"Bloomington","municode_url":"https://library.municode.com/in/bloomington","pdf_url":"https://bloomington.in.gov/sites/default/files/2026-01/UDO_November_2025%20APPROVED.pdf"}
+
+# Pipe format: town_slug|town_name|municode_url|pdf_url
+bloomington|Bloomington|https://library.municode.com/in/bloomington|https://bloomington.in.gov/sites/default/files/2026-01/UDO_November_2025%20APPROVED.pdf
