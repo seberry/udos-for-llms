@@ -102,6 +102,15 @@ Outputs:
 - `phase2_adu_tables/normalized/table_04-10_normalized.json`
 - matching `*.jsonl`, `*.html`, and `target_tables_report.json`
 
+Generate side-by-side comparison artifact (PDF page images vs finalized normalized tables):
+
+```bash
+npm run compare:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
+Output:
+- `phase2_adu_tables/normalized/target_tables_comparison.html`
+
 ## Notes
 
 - `phase2_adu_tables` uses heuristic parsing from `pages_raw.jsonl` table blocks (`Table xx-yy` patterns).
