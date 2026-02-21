@@ -267,11 +267,39 @@ function toColumns(line: string): string[] {
     .filter((part) => part.length > 0);
 }
 
-function parseRows(lines: string[]): { rows: TableRowRecord[]; columnCountGuess: number } {
+function isLikelyZoneHeaderLine(line: string): boolean {
+  const normalized = line
+    .toUpperCase()
+    .replace(/[^A-Z0-9 ]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!normalized) return false;
+  const zones = ["R1", "R2", "R3", "R4", "RM", "RH", "RMH", "MS", "MN", "MM", "MC", "ME", "MI", "MD", "MH", "EM"];
+  let hits = 0;
+  for (const zone of zones) {
+    if (new RegExp(`\\b${zone}\\b`).test(normalized)) hits += 1;
+  }
+  return hits >= 10;
+}
+
+function trimLeadingNoise(lines: string[], tableRef: string): string[] {
+  if (tableRef !== "03-1") {
+    return lines;
+  }
+
+  const headerIdx = lines.findIndex((line) => isLikelyZoneHeaderLine(line));
+  if (headerIdx > 0) {
+    return lines.slice(headerIdx);
+  }
+  return lines;
+}
+
+function parseRows(lines: string[], tableRef: string): { rows: TableRowRecord[]; columnCountGuess: number } {
+  const filteredLines = trimLeadingNoise(lines, tableRef);
   const rows: TableRowRecord[] = [];
   let columnCountGuess = 1;
 
-  for (const line of lines) {
+  for (const line of filteredLines) {
     const rowText = normalizeWhitespace(line);
     if (!rowText) continue;
     const columns = toColumns(line);
@@ -435,7 +463,7 @@ async function main(): Promise<void> {
     const relevance = scoreRelevance(tableTextLower, category);
     if (relevance < 3) continue;
 
-    const { rows, columnCountGuess } = parseRows(merged.lines);
+    const { rows, columnCountGuess } = parseRows(merged.lines, tableRef);
     const dedupedRows = dedupeRows(rows);
     const chunkIds = getChunkIdsForPageRange(chunks, merged.pageStart, merged.pageEnd);
     const sectionGuess = extractSectionGuess(merged.lines);

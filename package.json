@@ -8,6 +8,9 @@
     "grab:both": "tsx src/grab_dual_sources.ts",
     "build:corpus": "tsx src/build_llm_corpus.ts",
     "build:adu-tables": "tsx src/build_adu_tables.ts",
+    "debug:adu-tables": "tsx src/build_adu_table_debug_view.ts",
+    "bench:tables:pymupdf": "python tools/pymupdf_table_benchmark.py",
+    "normalize:table03:pymupdf": "tsx src/normalize_pymupdf_table03.ts",
     "eval:adu": "tsx src/eval_adu_retrieval.ts",
     "typecheck": "tsc --noEmit"
   },
