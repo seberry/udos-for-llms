@@ -89,6 +89,19 @@ Outputs:
 - `phase2_adu_tables/normalized/table_03-1_rows.jsonl`
 - `phase2_adu_tables/normalized/table_03-1_normalized.html`
 
+Normalize additional target tables (`03-4`, `04-9`, `04-10`):
+
+```bash
+npm run bench:tables:pymupdf -- --pdf sources/bloomington/2026-02-21/city_pdf/udo.pdf --out-dir corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/pymupdf_benchmark --pages 117,177,178,179,180,181,182
+npm run normalize:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
+Outputs:
+- `phase2_adu_tables/normalized/table_03-4_normalized.json`
+- `phase2_adu_tables/normalized/table_04-9_normalized.json`
+- `phase2_adu_tables/normalized/table_04-10_normalized.json`
+- matching `*.jsonl`, `*.html`, and `target_tables_report.json`
+
 ## Notes
 
 - `phase2_adu_tables` uses heuristic parsing from `pages_raw.jsonl` table blocks (`Table xx-yy` patterns).

@@ -7,7 +7,9 @@
 - Bloomington `city_pdf` UDO snapshot `2026-02-21`
 - Focus tables:
   - `03-1` Allowed Use Table
-  - next targets: `03-4`, `04-9`, `04-10`
+  - `03-4` Number/size of enclosed accessory structures
+  - `04-9` Minimum vehicle parking requirements
+  - `04-10` Maximum vehicle parking allowance
 
 ## Findings
 - The original heuristic line-based parser is not reliable for complex multi-level headers and wrapped rows.
@@ -33,6 +35,18 @@
    - `corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/pymupdf_benchmark/review_pages_91_92_93_94_95.html`
    - `corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/normalized/table_03-1_normalized.html`
 
-## Near-term plan
-- Extend the same external-extractor + normalizer pattern to `03-4`, `04-9`, and `04-10`.
-- Keep one-page/table human review as required gate before feeding table claims into eval/QA.
+## Extended targets status (`03-4`, `04-9`, `04-10`)
+- Implemented conservative normalizers and review artifacts:
+  - `normalized/table_03-4_*`
+  - `normalized/table_04-9_*`
+  - `normalized/table_04-10_*`
+  - summary: `normalized/target_tables_report.json`
+- Current quality profile:
+  - `03-4`: usable, with a split zoning-group row needing merge confirmation (`MS...MH`).
+  - `04-9`: core rows extracted; several null cells remain where PDF layout implies shared values.
+  - `04-10`: broad coverage extracted; null allowances remain for some grouped rows.
+
+## Working policy
+- Prefer conservative nulls over inferred values when confidence is low.
+- Add inferred fills only when rule confidence is explicit and auditable.
+- Keep one-page/table human review as required gate before feeding claims into eval/QA.

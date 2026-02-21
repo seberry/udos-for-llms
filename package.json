@@ -11,6 +11,7 @@
     "debug:adu-tables": "tsx src/build_adu_table_debug_view.ts",
     "bench:tables:pymupdf": "python tools/pymupdf_table_benchmark.py",
     "normalize:table03:pymupdf": "tsx src/normalize_pymupdf_table03.ts",
+    "normalize:targets:pymupdf": "tsx src/normalize_pymupdf_target_tables.ts",
     "eval:adu": "tsx src/eval_adu_retrieval.ts",
     "typecheck": "tsc --noEmit"
   },
