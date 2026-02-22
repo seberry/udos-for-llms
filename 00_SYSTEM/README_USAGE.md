@@ -89,6 +89,15 @@ After human review, run with gold labels:
 npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --gold-file corpus/bloomington/2026-02-21/city_pdf/phase2_adu_eval/gold_citations.json
 ```
 
+Human verification app for normalized target tables:
+
+```bash
+npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
+Then open:
+- `corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/normalized/target_tables_review_app.html`
+
 ## Config
 
 Defaults are in `grab.config.json`:

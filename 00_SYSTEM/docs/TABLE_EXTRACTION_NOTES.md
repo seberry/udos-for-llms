@@ -75,9 +75,18 @@
    - outputs:
      - `normalized/target_tables_verification_manifest.json`
      - `normalized/target_tables_review_needed.html`
+     - `normalized/target_tables_review_app.html`
 2. Manual review loop:
-   - update row-level `verification_status` (`verified | inferred_verified | needs_review`)
-   - set `reviewed_by_human=true` for rows set to `verified`
-   - add `reviewer_note` where needed
+   - open `target_tables_review_app.html` (table-centric, long-scroll workflow)
+   - zoom PDF page image(s) with in-card controls (`+`, `-`, `Reset`)
+   - compare highlighted rows in normalized chart
+   - add table-level natural-language reviewer note
+   - approve table or keep needs-review from in-card buttons
+   - export updated manifest from app and replace `target_tables_verification_manifest.json`
    - re-run verify script; `verified` persists only when `reviewed_by_human=true`, while row snapshots/provenance are refreshed from normalized artifacts
 3. Update eval to prioritize verified table rows for table-grounded scoring.
+
+## Throughput plan
+1. Keep review surface table-centric (not row-by-row cards).
+2. Minimize context switching by showing PDF + normalized chart in one card.
+3. Capture corrections as natural language notes first; convert to deterministic normalization rules after review pass.

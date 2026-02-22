@@ -120,6 +120,7 @@ npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf
 Outputs:
 - `phase2_adu_tables/normalized/target_tables_verification_manifest.json`
 - `phase2_adu_tables/normalized/target_tables_review_needed.html`
+- `phase2_adu_tables/normalized/target_tables_review_app.html`
 
 ## Next chunk (verification workflow)
 
@@ -144,6 +145,20 @@ Implement a row-level verification layer for normalized tables:
    - `reviewer_note` is preserved
    - row payload/provenance are refreshed from normalized artifacts
 4. Open `target_tables_review_needed.html` to review only unresolved rows.
+
+### Human review app (recommended)
+Use `target_tables_review_app.html` for fastest table verification:
+1. Open one table card at a time (03-4, 04-9, 04-10).
+2. Zoom PDF images with `+`, `-`, `Reset` controls next to each page image.
+3. Compare highlighted rows in the normalized chart against the page image(s).
+4. Enter table-level natural-language reviewer note.
+5. Click:
+   - `Looks Good: Approve This Table`, or
+   - `Keep/Set Needs Review`
+6. Use top controls:
+   - `Save Comments So Far` to export draft progress JSON
+   - `Approve All Without Comment` for final no-note sweep
+   - `Apply Comments + Approvals` to export updated verification manifest JSON
 
 ## Notes
 
