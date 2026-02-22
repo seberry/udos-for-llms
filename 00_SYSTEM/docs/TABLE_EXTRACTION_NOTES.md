@@ -58,3 +58,26 @@
 - Prefer conservative nulls over inferred values when confidence is low.
 - Add inferred fills only when rule confidence is explicit and auditable.
 - Keep one-page/table human review as required gate before feeding claims into eval/QA.
+
+## Citation anchor guidance
+- Store explicit source anchors for every normalized row so downstream LLM answers can cite directly:
+  - `page`
+  - `table_index`
+  - `source_row_index`
+  - optional `bbox` (table/row box) when available from extractor
+- Recommendation: expose a human-readable citation string per row, for example:
+  - `UDO city_pdf 2026-02-21, Table 04-10, page 178, source row 24`
+- Do not rely on implicit reconstruction at answer time when exact citation is possible.
+
+## Next action (recommended)
+1. Build/refresh verification artifacts:
+   - `npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21`
+   - outputs:
+     - `normalized/target_tables_verification_manifest.json`
+     - `normalized/target_tables_review_needed.html`
+2. Manual review loop:
+   - update row-level `verification_status` (`verified | inferred_verified | needs_review`)
+   - set `reviewed_by_human=true` for rows set to `verified`
+   - add `reviewer_note` where needed
+   - re-run verify script; `verified` persists only when `reviewed_by_human=true`, while row snapshots/provenance are refreshed from normalized artifacts
+3. Update eval to prioritize verified table rows for table-grounded scoring.

@@ -111,6 +111,40 @@ npm run compare:targets:pymupdf -- --town-slug bloomington --source-type city_pd
 Output:
 - `phase2_adu_tables/normalized/target_tables_comparison.html`
 
+Build/refresh row-level verification manifest and review-only artifact:
+
+```bash
+npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
+Outputs:
+- `phase2_adu_tables/normalized/target_tables_verification_manifest.json`
+- `phase2_adu_tables/normalized/target_tables_review_needed.html`
+
+## Next chunk (verification workflow)
+
+Implement a row-level verification layer for normalized tables:
+- manifest fields per row:
+  - `verification_status`: `verified | inferred_verified | needs_review`
+  - `reviewed_by_human` (required true for `verified`)
+  - `reviewer_note`
+- review artifact:
+  - show only `needs_review` rows side-by-side with source PDF context
+- citation requirement:
+  - retain and expose source anchors (`page`, `table_index`, `source_row_index`, optional `bbox`) so LLMs can cite exact table locations to users.
+
+### Verification update loop
+1. Run `verify:targets:pymupdf` to refresh row snapshots and provenance from normalized tables.
+2. Edit `target_tables_verification_manifest.json`:
+   - set `verification_status` per row
+   - set `reviewed_by_human=true` when a human has checked and approved a row as `verified`
+   - add `reviewer_note` where needed
+3. Re-run `verify:targets:pymupdf`:
+   - prior `verified` status is preserved only when `reviewed_by_human=true`
+   - `reviewer_note` is preserved
+   - row payload/provenance are refreshed from normalized artifacts
+4. Open `target_tables_review_needed.html` to review only unresolved rows.
+
 ## Notes
 
 - `phase2_adu_tables` uses heuristic parsing from `pages_raw.jsonl` table blocks (`Table xx-yy` patterns).

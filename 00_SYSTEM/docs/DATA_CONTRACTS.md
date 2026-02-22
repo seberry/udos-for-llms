@@ -79,6 +79,12 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/
   table_blocks.jsonl
   adu_tables.json
   report.json
+  normalized/
+    table_03-4_normalized.json
+    table_04-9_normalized.json
+    table_04-10_normalized.json
+    target_tables_verification_manifest.json
+    target_tables_review_needed.html
 ```
 
 ### `table_blocks.jsonl` / `adu_tables.json` table schema
@@ -98,6 +104,29 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/
 - `source_url: string | null`
 - `source_sha256: string | null`
 - `snapshot_date: string`
+
+### `normalized/target_tables_verification_manifest.json` row schema
+- `manifest_row_id: string` (`<table_ref>:<row_id>`)
+- `table_ref: "03-4" | "04-9" | "04-10"`
+- `row_id: string`
+- `verification_status: "verified" | "inferred_verified" | "needs_review"`
+- `reviewed_by_human: boolean` (`true` required for `verified`)
+- `reviewer_note: string`
+- `review_reason: string[]` (auto-derived reason when defaulting to `needs_review`)
+- `inferred: boolean`
+- `type: "data" | "section"`
+- `provenance`:
+  - `page: number`
+  - `table_index: number`
+  - `source_row_index: number`
+  - `bbox?: number[]`
+- `row_snapshot: object` (latest normalized row payload; refreshed on each verify run)
+
+### Verification manifest merge policy
+- `verified` is human-only and is preserved only when prior row has `reviewed_by_human=true`.
+- rows without human-reviewed `verified` fall back to script defaults (`needs_review` or `inferred_verified`).
+- `reviewer_note` is preserved from prior manifest rows by `manifest_row_id`.
+- `provenance`, `review_reason`, `inferred`, and `row_snapshot` are refreshed from normalized artifacts on every run.
 
 ## Phase 2 ADU Evaluation Artifacts
 
