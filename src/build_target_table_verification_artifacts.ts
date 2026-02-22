@@ -305,7 +305,7 @@ function interactiveReviewAppHtml(
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--ink)}
-header{position:sticky;top:0;z-index:10;background:#f0f3f8;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header{position:sticky;top:0;z-index:30;background:#f0f3f8;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 header .meta{font-size:12px;color:var(--muted);margin-left:auto}
 button{border:1px solid #bac5d6;background:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
 button.primary{background:#134e4a;color:#fff;border-color:#0f766e}
@@ -318,32 +318,28 @@ main{padding:12px;display:grid;gap:12px}
 .badge.needs{border-color:#fecaca;background:#fff1f2;color:var(--bad)}
 .badge.inferred{border-color:#fde68a;background:#fffbeb;color:#92400e}
 .badge.ok{border-color:#bbf7d0;background:#f0fdf4;color:#166534}
-.grid{display:grid;grid-template-columns:520px minmax(420px,1fr);gap:10px;padding:10px}
+.panel{position:sticky;top:58px;z-index:20;border-bottom:1px solid var(--border);padding:10px 12px;background:#f9fbff;display:grid;gap:8px}
 .imgwrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff}
 .imgtools{display:flex;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--border);background:#f8fbff}
 .imgtools button{padding:4px 8px;border-radius:6px;font-size:12px}
 .imgpane{overflow:auto;max-height:72vh;background:#fff}
 .imgwrap img{width:100%;height:auto;display:block;transform-origin:top left}
 .imgcap{font-size:12px;padding:6px 8px;border-top:1px solid var(--border);color:var(--muted)}
-.imggrid{display:grid;gap:8px}
-.fields{display:grid;gap:10px}
 .line{font-size:13px}
 .line b{color:#111827}
-textarea{width:100%;min-height:96px;resize:vertical;border:1px solid #c7cedb;border-radius:8px;padding:8px;font:inherit}
+textarea{width:100%;min-height:84px;resize:vertical;border:1px solid #c7cedb;border-radius:8px;padding:8px;font:inherit}
 .rowcontrols{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .small{font-size:12px;color:var(--muted)}
+.pageblock{padding:10px;border-top:1px solid #eef2f7}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.pagetitle{font-size:12px;color:var(--muted);margin-bottom:8px}
 .scroll{overflow:auto;border:1px solid var(--border);border-radius:8px}
-table{border-collapse:collapse;min-width:820px;width:100%}
+table{border-collapse:collapse;min-width:760px;width:100%}
 th,td{border:1px solid #d7dbe2;padding:6px 7px;vertical-align:top}
 th{background:#f2f6fc;position:sticky;top:0;z-index:1}
 tr.flag-needs td{background:#fff1f2}
 tr.flag-inferred td{background:#fffbeb}
-.flaglist{border:1px solid var(--border);border-radius:8px;padding:8px;background:#fafcff}
-.flaglist ul{margin:6px 0 0 18px;padding:0}
-.flaglist li{margin:3px 0}
-a.rowlink{color:#0f3a8a;text-decoration:none}
-a.rowlink:hover{text-decoration:underline}
-@media (max-width:1100px){.grid{grid-template-columns:1fr}}
+@media (max-width:1100px){.split{grid-template-columns:1fr}}
 </style></head>
 <body>
 <header>
@@ -387,10 +383,18 @@ a.rowlink:hover{text-decoration:underline}
     return "";
   }
 
-  function badge(row) {
-    if (row.verification_status === "needs_review") return '<span class="badge needs">needs_review</span>';
-    if (row.verification_status === "inferred_verified") return '<span class="badge inferred">inferred_verified</span>';
-    return '<span class="badge ok">verified</span>';
+  function pagesForGroup(group) {
+    const rowsByPage = new Map();
+    for (const row of group.rows) {
+      const page = row.provenance.page;
+      if (!rowsByPage.has(page)) rowsByPage.set(page, []);
+      rowsByPage.get(page).push(row);
+    }
+    return group.image_srcs.map((img) => ({
+      page: img.page,
+      src: img.src,
+      rows: rowsByPage.get(img.page) || []
+    }));
   }
 
   function groupCounts(group) {
@@ -427,19 +431,17 @@ a.rowlink:hover{text-decoration:underline}
       const note = tableNotes.get(group.table_ref) || "";
       const columns = tableColumns(group.table_ref);
       const header = columns.map((col) => "<th>" + col + "</th>").join("");
-      const rowsHtml = group.rows.map((row) => {
-        const cells = columns.map((col) => "<td>" + String(value(row, col)).replace(/</g, "&lt;") + "</td>").join("");
-        return \`<tr id="\${group.table_ref}-\${row.row_id}" class="\${rowClass(row)}">\${cells}</tr>\`;
-      }).join("");
-      const flags = group.rows.filter((row) => row.verification_status !== "verified");
-      const flagItems = flags.map((row) => {
-        const reason = (row.review_reason || []).join("; ") || "(no auto reason)";
-        return \`<li>\${badge(row)} <a class="rowlink" href="#\${group.table_ref}-\${row.row_id}">\${row.row_id}</a> - \${reason}</li>\`;
-      }).join("");
-      const images = group.image_srcs.map((img) => {
-        const zoomKey = group.table_ref + ":" + img.page;
+      const pageBlocks = pagesForGroup(group).map((pageBlock) => {
+        const zoomKey = group.table_ref + ":" + pageBlock.page;
         const zoom = imageZoom.get(zoomKey) || 1;
-        return \`<figure class="imgwrap" data-zoom-key="\${zoomKey}">
+        const rowsHtml = pageBlock.rows.map((row) => {
+          const cells = columns.map((col) => "<td>" + String(value(row, col)).replace(/</g, "&lt;") + "</td>").join("");
+          return \`<tr id="\${group.table_ref}-\${row.row_id}" class="\${rowClass(row)}">\${cells}</tr>\`;
+        }).join("");
+        return \`<section class="pageblock">
+          <div class="pagetitle">Source page \${pageBlock.page}</div>
+          <div class="split">
+            <figure class="imgwrap" data-zoom-key="\${zoomKey}">
           <div class="imgtools">
             <button class="zoom-out" data-zoom-key="\${zoomKey}">-</button>
             <button class="zoom-in" data-zoom-key="\${zoomKey}">+</button>
@@ -447,10 +449,13 @@ a.rowlink:hover{text-decoration:underline}
             <span class="small">zoom \${Math.round(zoom * 100)}%</span>
           </div>
           <div class="imgpane">
-            <img loading="lazy" src="\${img.src}" alt="PDF page \${img.page}" style="transform:scale(\${zoom});"/>
+            <img loading="lazy" src="\${pageBlock.src}" alt="PDF page \${pageBlock.page}" style="transform:scale(\${zoom});"/>
           </div>
-          <figcaption class="imgcap">PDF page \${img.page}</figcaption>
-        </figure>\`;
+          <figcaption class="imgcap">PDF page \${pageBlock.page}</figcaption>
+            </figure>
+            <div class="scroll"><table><thead><tr>\${header}</tr></thead><tbody>\${rowsHtml}</tbody></table></div>
+          </div>
+        </section>\`;
       }).join("");
 
       return \`<section class="card" data-table="\${group.table_ref}">
@@ -460,26 +465,17 @@ a.rowlink:hover{text-decoration:underline}
           <span class="badge inferred">inferred_verified: \${counts.inferred}</span>
           <span class="badge needs">needs_review: \${counts.needs}</span>
         </div>
-        <div class="grid">
-          <div class="imggrid">
-            \${images}
+        <div class="panel">
+          <div class="rowcontrols">
+            <button class="approve-table">Looks Good: Approve This Table</button>
+            <button class="mark-needs-table">Keep/Set Needs Review</button>
           </div>
-          <div class="fields">
-            <div class="flaglist">
-              <div class="line"><b>Flagged rows in this table</b> (highlighted in chart below):</div>
-              <ul>\${flagItems || "<li>None</li>"}</ul>
-            </div>
-            <div class="scroll"><table><thead><tr>\${header}</tr></thead><tbody>\${rowsHtml}</tbody></table></div>
-            <div class="rowcontrols">
-              <button class="approve-table">Looks Good: Approve This Table</button>
-              <button class="mark-needs-table">Keep/Set Needs Review</button>
-            </div>
-            <label>
-              <div class="line"><b>Table-level reviewer note (natural language):</b></div>
-              <textarea class="table-note" placeholder="Describe fixes/fill rules for this table. This note is applied to flagged rows when you click a table action.">\${note.replace(/</g, "&lt;")}</textarea>
-            </label>
-          </div>
+          <label>
+            <div class="line"><b>Table-level reviewer note (natural language):</b></div>
+            <textarea class="table-note" placeholder="Describe fixes/fill rules for this table. This note is applied to rows when you click a table action.">\${note.replace(/</g, "&lt;")}</textarea>
+          </label>
         </div>
+        \${pageBlocks}
       </section>\`;
     }).join("");
 
