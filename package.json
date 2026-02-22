@@ -14,6 +14,7 @@
     "normalize:targets:pymupdf": "tsx src/normalize_pymupdf_target_tables.ts",
     "compare:targets:pymupdf": "tsx src/build_target_table_comparison_artifact.ts",
     "verify:targets:pymupdf": "tsx src/build_target_table_verification_artifacts.ts",
+    "inventory:tables": "tsx src/build_table_inventory_backlog.ts",
     "eval:adu": "tsx src/eval_adu_retrieval.ts",
     "typecheck": "tsc --noEmit"
   },

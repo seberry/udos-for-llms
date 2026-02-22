@@ -122,6 +122,17 @@ Outputs:
 - `phase2_adu_tables/normalized/target_tables_review_needed.html`
 - `phase2_adu_tables/normalized/target_tables_review_app.html`
 
+Build table inventory and prioritized normalization/verification backlog:
+
+```bash
+npm run inventory:tables -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
+Outputs:
+- `phase2_adu_tables/inventory/table_inventory_backlog.json`
+- `phase2_adu_tables/inventory/table_inventory_backlog.md`
+- `phase2_adu_tables/inventory/table_inventory_next_targets.json`
+
 ## Next chunk (verification workflow)
 
 Implement a row-level verification layer for normalized tables:

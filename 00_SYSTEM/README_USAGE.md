@@ -98,6 +98,12 @@ npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf
 Then open:
 - `corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/normalized/target_tables_review_app.html`
 
+Table inventory + backlog (what to normalize/verify next):
+
+```bash
+npm run inventory:tables -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+
 ## Config
 
 Defaults are in `grab.config.json`:
