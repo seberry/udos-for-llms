@@ -69,6 +69,12 @@
   - `UDO city_pdf 2026-02-21, Table 04-10, page 178, source row 24`
 - Do not rely on implicit reconstruction at answer time when exact citation is possible.
 
+## Pattern registry (formatting conventions)
+- Track recurring formatting conventions and inference rules in:
+  - `00_SYSTEM/docs/NORMALIZATION_STYLE_PATTERNS.md`
+- Add entries whenever new towns/snapshots introduce new layout conventions (footnotes, grouped blanks, split rows, wrapped headers, etc.).
+- Keep this registry synchronized with normalization rule notes and reviewer guidance.
+
 ## Next action (recommended)
 1. Build/refresh verification artifacts:
    - `npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21`

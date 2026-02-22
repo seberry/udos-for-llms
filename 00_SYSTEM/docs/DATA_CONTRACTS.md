@@ -128,6 +128,12 @@ corpus/<town_slug>/<YYYY-MM-DD>/<source_type>/phase2_adu_tables/
 - `reviewer_note` is preserved from prior manifest rows by `manifest_row_id`.
 - `provenance`, `review_reason`, `inferred`, and `row_snapshot` are refreshed from normalized artifacts on every run.
 
+### Optional future extension (pattern auditing)
+- Additive field candidate:
+  - `detected_patterns: string[]` (for example `["P-0001", "P-0002"]`)
+- Pattern IDs should reference:
+  - `00_SYSTEM/docs/NORMALIZATION_STYLE_PATTERNS.md`
+
 ## Phase 2 ADU Evaluation Artifacts
 
 ```text

@@ -163,6 +163,8 @@ Use `target_tables_review_app.html` for fastest table verification:
 ## Notes
 
 - `phase2_adu_tables` uses heuristic parsing from `pages_raw.jsonl` table blocks (`Table xx-yy` patterns).
+- normalization conventions and recurring layout rules are tracked in:
+  - `00_SYSTEM/docs/NORMALIZATION_STYLE_PATTERNS.md`
 - `phase2_adu_eval` builds a retrieval index from:
   - `phase1/chunks_all.jsonl`
   - `phase2_adu_tables/adu_tables.json` rows
