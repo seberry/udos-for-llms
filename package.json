@@ -6,6 +6,10 @@
   "scripts": {
     "grab": "tsx src/grab_municode_pdf.ts",
     "grab:both": "tsx src/grab_dual_sources.ts",
+    "inventory:jurisdictions:validate": "tsx src/manage_jurisdiction_inventory.ts validate",
+    "inventory:jurisdictions:summary": "tsx src/manage_jurisdiction_inventory.ts summary",
+    "inventory:jurisdictions:build-batch": "tsx src/manage_jurisdiction_inventory.ts build-batch",
+    "inventory:jurisdictions:add": "tsx src/manage_jurisdiction_inventory.ts add-discovered",
     "build:corpus": "tsx src/build_llm_corpus.ts",
     "build:adu-tables": "tsx src/build_adu_tables.ts",
     "debug:adu-tables": "tsx src/build_adu_table_debug_view.ts",

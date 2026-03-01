@@ -2,6 +2,44 @@
 
 This document defines expected file structures and JSON fields.
 
+## Jurisdiction Inventory
+
+Mutable discovery and planning data lives under:
+
+```text
+inventory/
+  jurisdictions.jsonl
+  batches/
+  discovery_notes/
+```
+
+### `jurisdictions.jsonl` row schema
+
+- `jurisdiction_slug: string`
+- `jurisdiction_name: string`
+- `jurisdiction_type: "city" | "town" | "county" | "village" | "other"`
+- `state: string`
+- `county_name: string | null` (county containing the municipality, or same-name county for county records)
+- `source_system: "municode" | "direct_pdf" | "ecode" | "other" | "unknown"`
+- `landing_url: string | null`
+- `pdf_url: string | null`
+- `document_kind: "udo" | "zoning_ordinance" | "land_development_code" | "code_of_ordinances" | "unknown"`
+- `status: "discovered" | "source_found" | "grab_ready" | "grabbed" | "failed" | "needs_review"`
+- `notes: string`
+- `discovered_at: string | null` (prefer `YYYY-MM-DD`)
+- `last_checked_at: string | null` (prefer `YYYY-MM-DD`)
+- `last_successful_snapshot_date: string | null` (`YYYY-MM-DD` when snapshot exists)
+- `tags: string[]`
+
+### Semantics
+
+- `inventory/` is mutable and operational. It is not the source-of-truth archive of ordinance content.
+- `landing_url` is the best known human-facing source page.
+- `pdf_url` is the best known direct PDF URL, if available.
+- `source_system` is a coarse classification for planning and batching; it does not guarantee the current downloader supports that source.
+- `status="grab_ready"` means the current tooling likely has enough information to attempt a download.
+- `status="grabbed"` means at least one successful dated snapshot exists under `sources/`.
+
 ## Snapshot Storage
 
 Single-source (`grab`):

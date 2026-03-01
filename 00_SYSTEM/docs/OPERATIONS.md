@@ -35,6 +35,12 @@ npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --g
 6. Log differences from previous snapshot (`content_changed_since_previous`).
 7. Update QA evaluation set if major ordinance changes landed.
 
+## Discovery Discipline
+
+- When source discovery for a jurisdiction hits a non-obvious pattern, add a short record to `inventory/discovery_attempts.jsonl`.
+- Prefer recording the blocker once over repeatedly retrying the same simple direct-PDF workflow.
+- Promote jurisdictions to `grab_ready` only when the current downloader actually has a realistic path forward.
+
 ## Before Merging Changes
 
 Run:
