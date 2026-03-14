@@ -1,3 +1,6 @@
+This is just public for testing. NOT READY FOR HUMAN CONSUMPTION
+
+
 # LLM-Readable UDO Corpus
 
 System documentation now lives under `00_SYSTEM/`.
