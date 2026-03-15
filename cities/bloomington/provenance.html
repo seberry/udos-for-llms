@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Bloomington provenance for official source captures, dated snapshots, and derived corpus artifacts." />
+  <title>Bloomington Provenance</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --surface: #fffdf8;
+      --ink: #18242f;
+      --muted: #55636d;
+      --accent: #1f5562;
+      --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      --sans: "Segoe UI Variable", "Aptos", "Trebuchet MS", Verdana, sans-serif;
+      --max: 920px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+    .wrap { width: min(calc(100% - 2rem), var(--max)); margin: 0 auto; padding: 2.5rem 0 4rem; }
+    h1, h2 { font-family: var(--serif); line-height: 1.15; }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); margin: 0 0 0.8rem; }
+    h2 { margin-top: 2.2rem; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); }
+    .block {
+      padding: 1rem 1.05rem;
+      border: 1px solid rgba(24, 36, 47, 0.12);
+      border-radius: 16px;
+      background: var(--surface);
+      margin-top: 1rem;
+    }
+    code { font-family: "Cascadia Code", Consolas, monospace; }
+    ul { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Bloomington provenance</h1>
+    <p class="meta">Snapshot date: 2026-02-21 | <a href="index.html">Back to Bloomington page</a> | <a href="../../index.html">Landing page</a></p>
+
+    <section class="block">
+      <h2>Official source captures</h2>
+      <ul>
+        <li>City PDF source URL: <a href="https://bloomington.in.gov/sites/default/files/2026-01/UDO_November_2025%20APPROVED.pdf">Bloomington official PDF</a></li>
+        <li>Municode source URL: <a href="https://library.municode.com/in/bloomington">Bloomington Municode landing page</a></li>
+        <li>City PDF retrieval time: <code>2026-02-21T10:42:58-05:00</code></li>
+        <li>Municode retrieval time: <code>2026-02-21T10:42:08-05:00</code></li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Archived local source files</h2>
+      <ul>
+        <li><a href="../../sources/bloomington/2026-02-21/city_pdf/udo.pdf">Archived city PDF snapshot</a></li>
+        <li><a href="../../sources/bloomington/2026-02-21/city_pdf/source.json">City PDF source metadata</a></li>
+        <li><a href="../../sources/bloomington/2026-02-21/city_pdf/SHA256SUMS.txt">City PDF hash</a>: <code>0826f7b9513c9a8244e8e6ddb646d4414552ea2387e0229e587f03882eaa7d32</code></li>
+        <li><a href="../../sources/bloomington/2026-02-21/municode/udo.pdf">Archived Municode PDF snapshot</a></li>
+        <li><a href="../../sources/bloomington/2026-02-21/municode/source.json">Municode source metadata</a></li>
+        <li><a href="../../sources/bloomington/2026-02-21/municode/SHA256SUMS.txt">Municode PDF hash</a>: <code>9f1ee4ea93350970c3ecf246a93975612d8693868df33caffdfd9897d5978480</code></li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Derived corpus artifacts</h2>
+      <ul>
+        <li><a href="../../corpus/bloomington/2026-02-21/city_pdf/phase1/report.json">Phase 1 report</a></li>
+        <li><a href="../../corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/report.json">Phase 2 ADU tables report</a></li>
+        <li><a href="../../corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/normalized/target_tables_report.json">Normalized target tables report</a></li>
+        <li><a href="../../corpus/bloomington/2026-02-21/city_pdf/phase2_adu_eval/scored_report.json">Retrieval evaluation report</a></li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Interpretation notes</h2>
+      <ul>
+        <li>The city PDF and Municode snapshots were captured in parallel because future work may need cross-source comparison.</li>
+        <li>Derived artifacts are convenience layers for search and screening, not replacements for the authoritative source.</li>
+        <li>If a public page and an official source disagree, rely on the official source and report the discrepancy.</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
