@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"/><title>Table 03-4 Normalized</title>
+<style>body{font-family:Segoe UI,Arial,sans-serif;margin:16px}table{border-collapse:collapse;min-width:900px}th,td{border:1px solid #ddd;padding:5px 7px;vertical-align:top}th{background:#f1f5f9;position:sticky;top:0}.scroll{overflow:auto;border:1px solid #ddd}.inferred{background:#fff6db}</style>
+</head><body><h1>Table 03-4 Normalized</h1><div class="scroll"><table><thead><tr><th>Zoning District</th><th>Maximum Number</th><th>Maximum Footprint</th><th>Inference Notes</th></tr></thead><tbody><tr><td>R1</td><td>2</td><td>1,000 square feet or 50 percent of the square footage of the primary structure, whichever is less [1]</td><td></td></tr>
+<tr><td>R2</td><td class="inferred">2</td><td>840 square feet</td><td>maximum_number carried from previous grouped row</td></tr>
+<tr><td>R3</td><td class="inferred">2</td><td>580 square feet</td><td>maximum_number carried from previous grouped row</td></tr>
+<tr><td>R4</td><td class="inferred">2</td><td>400 square feet</td><td>maximum_number carried from previous grouped row</td></tr>
+<tr><td>RM, RH, RMH</td><td>None</td><td>840 square feet or 15 percent of the cumulative square footage of the primary building(s) footprint, whichever is greater.</td><td></td></tr>
+<tr><td>MS, MN, MM, MD, MC, ME, MH</td><td class="inferred">None</td><td>1000 square feet or 15 percent of the cumulative square footage of the primary building(s) footprint, whichever is greater.</td><td>merged split zoning-group row and set explicit maximum_number=None</td></tr>
+<tr><td>MI, EM, PO</td><td>None</td><td>None</td><td>filled blank maximum_footprint as None</td></tr></tbody></table></div></body></html>

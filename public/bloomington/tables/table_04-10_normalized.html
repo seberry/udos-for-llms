@@ -1,0 +1,146 @@
+<!doctype html><html><head><meta charset="utf-8"/><title>Table 04-10 Normalized</title>
+<style>body{font-family:Segoe UI,Arial,sans-serif;margin:16px}table{border-collapse:collapse;min-width:1000px}th,td{border:1px solid #ddd;padding:5px 7px;vertical-align:top}th{background:#f1f5f9;position:sticky;top:0}.scroll{overflow:auto;border:1px solid #ddd}.inferred{background:#fff6db}</style>
+</head><body><h1>Table 04-10 Normalized</h1><div class="scroll"><table><thead><tr><th>Type</th><th>Use</th><th>Maximum Vehicle Parking Allowance</th><th>Inference Notes</th></tr></thead><tbody><tr><td>section</td><td>RESIDENTIAL USES</td><td></td><td></td></tr>
+<tr><td>section</td><td>Household Living</td><td></td><td></td></tr>
+<tr><td>data</td><td>Dwelling, single-family (detached)</td><td>No limit</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, single-family (attached)</td><td class="inferred">No limit</td><td>filled from detached single-family grouped row</td></tr>
+<tr><td>data</td><td>Dwelling, duplex</td><td>2 spaces per DU</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, triplex</td><td class="inferred">2 spaces per DU</td><td>filled from duplex grouped row</td></tr>
+<tr><td>data</td><td>Dwelling, fourplex</td><td class="inferred">2 spaces per DU</td><td>filled from duplex grouped row</td></tr>
+<tr><td>data</td><td>Dwelling, multifamily</td><td>125 percent of the potential minimum, or 1.25 spaces per bedroom, whichever is less. When there is no required minimum number of spaces, the number of spaces listed per DU in Table 04-9 shall be used in the 125% calculation.</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, live/work</td><td>1 space per DU</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, cottage development</td><td>2 spaces per DU</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, mobile home</td><td>2 spaces per DU</td><td></td></tr>
+<tr><td>data</td><td>Manufactured home park</td><td>2 spaces per DU, plus 1 visitor space per 2 DUs</td><td></td></tr>
+<tr><td>section</td><td>Group Living</td><td></td><td></td></tr>
+<tr><td>data</td><td>Assisted living facility</td><td>1 space per 6 infirmary or nursing home beds; plus 1 space per 3 rooming units; plus 1 space per 3 DUs</td><td></td></tr>
+<tr><td>data</td><td>Continuing care retirement facility</td><td class="inferred">1 space per 6 infirmary or nursing home beds; plus 1 space per 3 rooming units; plus 1 space per 3 DUs</td><td>filled from assisted-living grouped row</td></tr>
+<tr><td>data</td><td>Fraternity or sorority house</td><td>0.8 spaces per bed</td><td></td></tr>
+<tr><td>data</td><td>Group care home, FHAA small</td><td>1 space per 4 persons design capacity</td><td></td></tr>
+<tr><td>data</td><td>Group care facility, FHAA large</td><td class="inferred">1 space per 4 persons design capacity</td><td>filled from FHAA small grouped row</td></tr>
+<tr><td>data</td><td>Nursing or convalescent home</td><td class="inferred">1 space per 4 persons design capacity</td><td>filled from FHAA small grouped row</td></tr>
+<tr><td>data</td><td>Opioid rehabilitation home, small</td><td class="inferred">1 space per 4 persons design capacity</td><td>filled from FHAA small grouped row</td></tr>
+<tr><td>data</td><td>Opioid rehabilitation home, large</td><td class="inferred">1 space per 4 persons design capacity</td><td>filled from FHAA small grouped row</td></tr>
+<tr><td>data</td><td>Single Room Occupancy</td><td>2 spaces; plus 1 space per bedroom</td><td></td></tr>
+<tr><td>data</td><td>Student housing or dormitory</td><td>0.75 spaces per bedroom</td><td></td></tr>
+<tr><td>data</td><td>Supportive housing, small</td><td>2.5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Supportive housing, large</td><td class="inferred">2.5 spaces per 1,000 sq. ft. GFA</td><td>filled from supportive-housing grouped row</td></tr>
+<tr><td>section</td><td>PUBLIC, INSTITUTIONAL, AND CIVIC USES</td><td></td><td></td></tr>
+<tr><td>section</td><td>Community and Cultural Facilities</td><td></td><td></td></tr>
+<tr><td>data</td><td>Art gallery, museum, or library</td><td>2 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Cemetery or mausoleum</td><td>1 space per 4 seats in chapel or assembly area</td><td></td></tr>
+<tr><td>data</td><td>Club or lodge</td><td>1 space per 4 seats in main assembly area, or 5 spaces per 1,000 sq. ft. GFA, whichever is greater</td><td></td></tr>
+<tr><td>data</td><td>Community center</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Conference or convention center</td><td>2 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Crematory</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Day-care center, adult or child</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Government service facility</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Jail or detention facility</td><td>2 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Meeting, banquet, or event facility</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Mortuary</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Park</td><td>5 spaces per 1 acre plus 2.5 spaces per 1,000 sq. ft. of site used for recreational equipment area</td><td></td></tr>
+<tr><td>data</td><td>Place of worship</td><td>1 space per 4 seats in main assembly area, or 5 spaces per 1,000 sq. ft. GFA, whichever is greater</td><td></td></tr>
+<tr><td>data</td><td>Police, fire, or rescue station</td><td>4 spaces per 1,000 sq. ft. GFA plus 1 space per each vehicle used for police, fire, and rescue</td><td></td></tr>
+<tr><td>data</td><td>Urban agriculture, noncommercial</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>section</td><td>Educational Facilities</td><td></td><td></td></tr>
+<tr><td>data</td><td>School, college or university</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>School, public or private</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>School, trade or business</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>Healthcare Facilities</td><td></td><td></td></tr>
+<tr><td>data</td><td>Hospital</td><td>1 space per patient bed design capacity</td><td></td></tr>
+<tr><td>data</td><td>Medical clinic</td><td>5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Methadone treatment facility</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Opioid rehabilitation facility</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>COMMERCIAL USES</td><td></td><td></td></tr>
+<tr><td>section</td><td>Agricultural and Animal Uses</td><td></td><td></td></tr>
+<tr><td>data</td><td>Kennel</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Orchard or tree farm, commercial</td><td>1.25 spaces per 1 acre</td><td></td></tr>
+<tr><td>data</td><td>Pet grooming</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Plant nursery or greenhouse, commercial</td><td>3.3 spaces per 1,000 sq. ft. of GFA retail sales</td><td></td></tr>
+<tr><td>data</td><td>Veterinarian clinic</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>Entertainment and Recreation</td><td></td><td></td></tr>
+<tr><td>data</td><td>Amenity center</td><td>2.5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Country club</td><td>2 spaces per golf hole plus 2.5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Recreation, indoor</td><td>Bowling alley: 3 spaces per lane Theater: 1 space per 4 seats in assembly areas All other: 4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Recreation, outdoor</td><td>Golf course: 2 spaces per golf hole Mini golf course: 1 space per golf hole Golf driving range: 1 space per tee box All other: 2.5 spaces per 1,000 sq. ft. of site area used for recreation</td><td></td></tr>
+<tr><td>data</td><td>Sexually oriented business</td><td>5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Stadium</td><td>1 space per 8 seats</td><td></td></tr>
+<tr><td>section</td><td>Food, Beverage, and Lodging</td><td></td><td></td></tr>
+<tr><td>data</td><td>Bar or Dance club</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Bed and breakfast</td><td>1 space per guest bedroom</td><td></td></tr>
+<tr><td>data</td><td>Brewpub, distillery, or winery</td><td>Indoor tasting/seating area: 10 spaces per 1,000 sq. ft. GFA; Outdoor tasting/seating area: 5 spaces per 1,000 sq. ft. of outdoor seating area</td><td></td></tr>
+<tr><td>data</td><td>Hotel or motel</td><td>1 space per guest room</td><td></td></tr>
+<tr><td>data</td><td>Restaurant</td><td>Indoor seating area: 10 spaces per 1,000 sq. ft. GFA; Outdoor seating area: 5 spaces per 1,000 sq. ft. of outdoor seating area</td><td></td></tr>
+<tr><td>section</td><td>Office, Business, and Professional Services</td><td></td><td></td></tr>
+<tr><td>data</td><td>Artist studio or workshop</td><td>1 space per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Check cashing</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Financial institution</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Fitness center, small</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Fitness center, large</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Office</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Personal service, small</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Personal service, large</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>Retail Sales</td><td></td><td></td></tr>
+<tr><td>data</td><td>Building supply store</td><td>2 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Grocery or supermarket</td><td>5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Liquor or tobacco sales</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Pawn shop</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Retail sales, small</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Retail sales, medium</td><td>4 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Retail sales, large</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Retail sales, big box</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>Vehicles and Equipment</td><td></td><td></td></tr>
+<tr><td>data</td><td>Equipment sales or rental</td><td>2.85 spaces per 1,000 sq. ft. GFA of indoor sales/leasing/ office area; plus 1 space per service bay</td><td></td></tr>
+<tr><td>data</td><td>Transportation terminal</td><td>1.25 spaces per 0.5 acres</td><td></td></tr>
+<tr><td>data</td><td>Vehicle fleet operations, small</td><td>1.25 spaces per 0.5 acres plus 3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Vehicle fleet operations, large</td><td>1.25 spaces per 0.5 acres plus 3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Vehicle fuel station</td><td>5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Vehicle impound storage</td><td>1.25 spaces per 0.5 acres</td><td></td></tr>
+<tr><td>data</td><td>Vehicle repair, major</td><td>2.85 spaces per 1,000 sq. ft. of indoor sales/leasing/ office area; plus 1 space per service bay</td><td></td></tr>
+<tr><td>data</td><td>Vehicle repair, minor</td><td></td><td></td></tr>
+<tr><td>data</td><td>Vehicle sales or rental</td><td></td><td></td></tr>
+<tr><td>data</td><td>Vehicle wash</td><td>2.5 spaces per 1,000 sq. ft. of indoor sales/office area plus 1 space per service bay</td><td></td></tr>
+<tr><td>section</td><td>EMPLOYMENT USES</td><td></td><td></td></tr>
+<tr><td>section</td><td>Manufacturing and Processing</td><td></td><td></td></tr>
+<tr><td>data</td><td>Commercial Laundry</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Food production or processing</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Manufacturing, artisan</td><td>2.5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Manufacturing, light</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Manufacturing, heavy</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Salvage or scrap yard</td><td>1.25 spaces per 0.5 acres plus 2.5 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>section</td><td>Storage, Distribution, or Warehousing</td><td></td><td></td></tr>
+<tr><td>data</td><td>Bottled gas storage or distribution</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Contractor’s yard</td><td>3.3 spaces per 1,000 sq. ft. GFA plus 1 space per each company vehicle up to a maximum of 30 company vehicles</td><td></td></tr>
+<tr><td>data</td><td>Distribution, warehouse, or wholesale facility</td><td>3.3 spaces per 1,000 sq. ft. GFA</td><td></td></tr>
+<tr><td>data</td><td>Storage, outdoor</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Storage, self-service</td><td>2.85 spaces per 1,000 GFA of indoor sales/leasing/office space</td><td></td></tr>
+<tr><td>section</td><td>Resource and Extraction</td><td></td><td></td></tr>
+<tr><td>data</td><td>Gravel, cement, or sand production</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Quarry</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Stone processing</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>section</td><td>UTILITIES AND COMMUNICATION</td><td></td><td></td></tr>
+<tr><td>data</td><td>Communication facility</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Solar collector, ground- or building-mounted</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Utility substation and transmission facility</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Wind energy system, large</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>data</td><td>Wind energy system, small</td><td>1.25 spaces per acre</td><td></td></tr>
+<tr><td>section</td><td>ACCESSORY USES</td><td></td><td></td></tr>
+<tr><td>data</td><td>Chicken flock</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Crops and pasturage</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Detached garage</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Drive-through</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Dwelling, accessory unit</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Electric vehicle charging facility</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Greenhouse, noncommercial</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Home occupation</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Outdoor retail and display</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Outdoor trash and recyclables receptacles</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Recycling drop-off, self-serve</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Swimming pool</td><td>No additional parking</td><td></td></tr>
+<tr><td>section</td><td>TEMPORARY USES</td><td></td><td></td></tr>
+<tr><td>data</td><td>Book buyback</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Construction support activities</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Farm produce sales</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Real estate sales or model home</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Seasonal sales</td><td>No additional parking</td><td></td></tr>
+<tr><td>data</td><td>Special event</td><td>No additional parking</td><td></td></tr></tbody></table></div></body></html>
