@@ -86,11 +86,9 @@
 <body>
   <header>
     <div class="wrap">
-      <p class="eyebrow">Current Test Jurisdiction</p>
+     
       <h1>Bloomington, Indiana</h1>
-      <p class="lede">
-        This is the current public demo packet for testing whether LLMs actually benefit from chunking, normalization, and table extraction when doing first-pass housing-code screening.
-      </p>
+
       <p class="meta">
         Dataset last updated: <strong>2026-02-21</strong> | Primary public source packet: city PDF snapshot plus a parallel Municode snapshot
       </p>
@@ -104,29 +102,7 @@
         <strong>Use boundary:</strong> This packet is for preliminary screening only. It is not an authoritative statement of Bloomington law, and it is not a substitute for checking the official UDO and confirming ambiguous points with staff.
       </div>
 
-      <section>
-        <h2>Snapshot summary</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>Phase 1 corpus</h3>
-            <p><strong>466</strong> pages</p>
-            <p><strong>743</strong> chunks</p>
-            <p><strong>732</strong> Chapter 20 subset chunks</p>
-          </div>
-          <div class="card">
-            <h3>Phase 2 tables</h3>
-            <p><strong>38</strong> selected ADU-relevant tables</p>
-            <p><strong>112</strong> candidate pages reviewed</p>
-            <p>Key normalized targets: <code>03-1</code>, <code>03-4</code>, <code>04-9</code>, <code>04-10</code></p>
-          </div>
-          <div class="card">
-            <h3>Initial eval</h3>
-            <p><strong>8/8</strong> retrieval hits on the current labeled question set</p>
-            <p><strong>0.8021</strong> mean nDCG@6</p>
-            <p><strong>0.7292</strong> mean MRR@6</p>
-          </div>
-        </div>
-      </section>
+     
 
       <section>
         <h2>What to inspect</h2>
@@ -156,42 +132,6 @@
             </tr>
           </tbody>
         </table>
-      </section>
-
-      <section>
-        <h2>Suggested A/B test for LLM usefulness</h2>
-        <ol>
-          <li>Ask a housing question using only the official Bloomington PDF.</li>
-          <li>Ask the same question again using the processed chunk and table artifacts from this page.</li>
-          <li>Require the model to cite the official source before making any claim.</li>
-          <li>Compare speed, citation quality, ambiguity handling, and whether the model notices likely follow-up checks.</li>
-        </ol>
-        <div class="callout">
-          <strong>What would count as success:</strong> better section targeting, more reliable table use, fewer invented constraints, and clearer articulation of ambiguity. The current Bloomington eval is promising, but still too small to treat as proof.
-        </div>
-      </section>
-
-      <section>
-        <h2>Prompt set you can reuse</h2>
-        <ul>
-          <li>Where is ADU use permission described across zoning districts?</li>
-          <li>What standards govern accessory dwelling units?</li>
-          <li>What detached ADU dimensional or setback constraints are listed?</li>
-          <li>What attached ADU limits are listed?</li>
-          <li>What owner-occupancy and recording requirements are listed for ADUs?</li>
-          <li>Where are parking requirements relevant to ADUs or dwelling units listed?</li>
-          <li>Where are accessory structure limits that may bound detached ADUs listed?</li>
-          <li>Which citations ground ADU utilities and connection rules?</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Cautions on the current Bloomington packet</h2>
-        <ul>
-          <li>The retrieval evaluation uses only eight labeled questions.</li>
-          <li>The Phase 2 table work is ADU-focused, not a full structured representation of the UDO.</li>
-          <li>Interpretive issues, overlays, and process constraints can still matter even if a first-pass answer looks favorable.</li>
-        </ul>
       </section>
     </div>
   </main>
