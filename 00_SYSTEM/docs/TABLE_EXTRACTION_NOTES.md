@@ -92,7 +92,52 @@
    - re-run verify script; `verified` persists only when `reviewed_by_human=true`, while row snapshots/provenance are refreshed from normalized artifacts
 3. Update eval to prioritize verified table rows for table-grounded scoring.
 
+## HTML Generation Scripts
+
+The normalized table HTML files are generated from corpus data using TypeScript scripts:
+
+### Table 03-1
+```bash
+npm run normalize:table03:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+- **Script:** `src/normalize_pymupdf_table03.ts`
+- **Output:** `corpus/.../normalized/table_03-1_normalized.html`
+- **Process:** Reads benchmark JSON, normalizes table structure, renders HTML with CSS
+
+### Tables 03-4, 04-9, 04-10
+```bash
+npm run normalize:targets:pymupdf -- --town-slug bloomington --source-type city_pdf --date 2026-02-21
+```
+- **Script:** `src/normalize_pymupdf_target_tables.ts`
+- **Outputs:** `corpus/.../normalized/table_03-4_normalized.html`, `table_04-9_normalized.html`, `table_04-10_normalized.html`
+- **Process:** Reads benchmark JSON, applies normalization rules, renders HTML with inference highlighting
+
+### Comparison Artifact
+```bash
+npm run compare:targets:pymupdf -- --town-slug bloomington --source-type city_pdf
+```
+- **Script:** `src/build_target_table_comparison_artifact.ts`
+- **Output:** `corpus/.../normalized/target_tables_comparison.html`
+- **Process:** Side-by-side comparison of PDF images with normalized tables
+
+### Verification Artifacts
+```bash
+npm run verify:targets:pymupdf -- --town-slug bloomington --source-type city_pdf
+```
+- **Script:** `src/build_target_table_verification_artifacts.ts`
+- **Outputs:** `target_tables_review_needed.html`, `target_tables_review_app.html`, verification manifest
+- **Process:** Creates review artifacts for human verification workflow
+
+## GitHub Pages Deployment
+
+After generating HTML files, copy them to the public directory for GitHub Pages deployment:
+```bash
+copy corpus\bloomington\<date>\city_pdf\phase2_adu_tables\normalized\*.html public\bloomington\tables\
+```
+See `00_SYSTEM/docs/GITHUB_PAGES_DEPLOYMENT.md` for complete deployment workflow.
+
 ## Throughput plan
 1. Keep review surface table-centric (not row-by-row cards).
 2. Minimize context switching by showing PDF + normalized chart in one card.
 3. Capture corrections as natural language notes first; convert to deterministic normalization rules after review pass.
+  ++++++++ REPLACE

@@ -14,6 +14,8 @@ Thanks for helping make public civic rules more legible.
 - `sources/` stores immutable dated snapshots of official source material.
 - `corpus/` stores derived processing outputs built from a dated snapshot.
 - `cities/` stores lightweight public-facing jurisdiction pages and placeholders.
+- `public/` stores deployable artifacts (HTML files, etc.) for GitHub Pages, not gitignored.
+  ++++++++ REPLACE
 
 ## How to add a new jurisdiction
 

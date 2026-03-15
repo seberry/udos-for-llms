@@ -25,20 +25,29 @@ npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6
 ```bash
 npm run eval:adu -- --town-slug bloomington --source-type city_pdf --top-k 6 --gold-file corpus/bloomington/<YYYY-MM-DD>/city_pdf/phase2_adu_eval/gold_citations.json
 ```
-5. Check reports:
+5. Deploy artifacts to GitHub Pages:
+```bash
+# Copy HTML table files to public directory
+copy corpus\bloomington\<YYYY-MM-DD>\city_pdf\phase2_adu_tables\normalized\*.html public\bloomington\tables\
+# Commit and push
+git add public/
+git commit -m "Update public table artifacts"
+git push
+```
+6. Check reports:
 - `low_text_pages` spikes
 - unexpectedly low `chunk_count`
 - extraction failures in logs
 - `phase2_adu_tables/report.json` for table extraction yield
 - `phase2_adu_eval/scored_report.json` for retrieval hit-rate and citation grounding quality
 - `mean_precision_at_k`, `mean_mrr_at_k`, `mean_ndcg_at_k` in `phase2_adu_eval/scored_report.json` when gold labels exist
-6. Log differences from previous snapshot (`content_changed_since_previous`).
-7. Update QA evaluation set if major ordinance changes landed.
+7. Log differences from previous snapshot (`content_changed_since_previous`).
+8. Update QA evaluation set if major ordinance changes landed.
 
 ## Discovery Discipline
 
 - When source discovery for a jurisdiction hits a non-obvious pattern, add a short record to `inventory/discovery_attempts.jsonl`.
-- Prefer recording the blocker once over repeatedly retrying the same simple direct-PDF workflow.
+- Prefer recording a blocker once over repeatedly retrying the same simple direct-PDF workflow.
 - Promote jurisdictions to `grab_ready` only when the current downloader actually has a realistic path forward.
 
 ## Before Merging Changes
@@ -71,7 +80,7 @@ npx playwright install chromium
 - If flow changed, update selectors in `src/grab_municode_pdf.ts` and `src/grab_dual_sources.ts`.
 
 ### Direct PDF URL fails with non-PDF response
-- Confirm the URL is a direct `.pdf` endpoint.
+- Confirm URL is a direct `.pdf` endpoint.
 - If URL redirects to HTML gate pages, adjust source acquisition strategy.
 
 ### High count of low-text pages

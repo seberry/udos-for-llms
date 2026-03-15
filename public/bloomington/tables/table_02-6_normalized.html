@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table 02-6: RM District Dimensional Standards (Normalized)</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .metadata {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .metadata p {
+      margin: 5px 0;
+      color: #4b5563;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+    tr:hover {
+      background: #f9fafb;
+    }
+    .label-cell {
+      background: #f3f4f6;
+      font-weight: 600;
+      width: 80px;
+      text-align: center;
+    }
+    .parameter-cell {
+      background: #fefce8;
+      font-weight: 500;
+      width: 300px;
+    }
+    .value-cell {
+      background: #ffffff;
+    }
+    .inferred {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+    }
+    .note-row {
+      background: #fffbeb;
+      font-style: italic;
+    }
+    .header-row {
+      background: #e0e7ff;
+    }
+    .citation {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Table 02-6: RM District Dimensional Standards</h1>
+  
+  <div class="metadata">
+    <p><strong>Table Ref:</strong> 02-6</p>
+    <p><strong>Pages:</strong> 31, 31</p>
+    <p><strong>Normalized:</strong> 2026-03-15T22:37:47.450Z</p>
+    <p><strong>Source:</strong> city_pdf 2026-02-21</p>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>Parameter</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class=" ">
+        <td class="label-cell"></td>
+        <td class="parameter-cell">Multifamily Dwelling</td>
+        <td class="value-cell">Triplex, or Fourplex Dwelling[4]</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">A</td>
+        <td class="parameter-cell">Lot area</td>
+        <td class="value-cell">5,000 square feet (0.115 acres)</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">B</td>
+        <td class="parameter-cell">Lot width</td>
+        <td class="value-cell">50 feet</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">C</td>
+        <td class="parameter-cell">Front</td>
+        <td class="value-cell">15 feet 25 feet [1] R4 district standards apply</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">D</td>
+        <td class="parameter-cell">Side</td>
+        <td class="value-cell">10 feet [2]</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">E</td>
+        <td class="parameter-cell">Rear</td>
+        <td class="value-cell">[2] 15 feet 20 feet behind the primary structure’s 60% 40%</td>
+      </tr>
+      <tr class=" ">
+        <td class="label-cell">F</td>
+        <td class="parameter-cell">Primary structure height (maximum)</td>
+        <td class="value-cell">3 stories, not to exceed 40 feet [2] [3] 20 feet</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <script>
+    // Add click-to-copy functionality
+    document.querySelectorAll('td').forEach(cell => {
+      cell.style.cursor = 'pointer';
+      cell.title = 'Click to copy';
+      cell.addEventListener('click', () => {
+        navigator.clipboard.writeText(cell.textContent);
+        cell.style.background = '#d1fae5';
+        setTimeout(() => {
+          cell.style.background = '';
+        }, 200);
+      });
+    });
+  </script>
+</body>
+</html>
