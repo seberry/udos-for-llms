@@ -203,6 +203,18 @@ def main():
     # Sort chunks by chunk_id to maintain order
     chunks.sort(key=lambda x: x.get('chunk_id', ''))
     
+    # Find the first chunk containing "TABLE OF CONTENTS" and start from there
+    start_index = 0
+    for i, chunk in enumerate(chunks):
+        if 'TABLE OF CONTENTS' in chunk.get('text', '').upper():
+            start_index = i
+            print(f"Found TABLE OF CONTENTS at chunk {i} (chunk_id: {chunk.get('chunk_id')})")
+            break
+    
+    # Filter to only include chunks from TABLE OF CONTENTS onwards
+    chunks = chunks[start_index:]
+    print(f"Displaying {len(chunks)} chunks starting from TABLE OF CONTENTS")
+    
     print("Generating HTML...")
     html_content = generate_html(chunks)
     
