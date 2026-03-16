@@ -71,7 +71,7 @@ function esc(v: string): string {
 }
 
 function loadImageHtml(page: number, benchmarkDir: string): string {
-  const rel = `../pymupdf_benchmark/images/page_${String(page).padStart(4, "0")}.png`;
+  const rel = `pymupdf_benchmark/images/page_${String(page).padStart(4, "0")}.png`;
   return `<figure><figcaption>PDF page ${page}</figcaption><img loading="lazy" src="${rel}" alt="PDF page ${page}" /></figure>`;
 }
 
