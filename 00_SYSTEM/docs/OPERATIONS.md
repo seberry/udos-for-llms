@@ -66,6 +66,40 @@ npm run grab -- --url "https://library.municode.com/in/bloomington" --dry-run
 - Monthly automated archival run.
 - Additional ad hoc run after major local ordinance updates.
 
+## Bloomington PDF Source Structure
+
+### City PDF Location
+- **Primary Source**: `sources/bloomington/2026-02-21/city_pdf/udo.pdf`
+  - This is the official city Unified Development Ordinance PDF
+  - Contains all dimensional standards tables for zoning districts (pages 23-65)
+  - Used for table extraction and verification
+
+### Other PDF Sources
+- **Root PDF**: `sources/bloomington/2026-02-21/udo.pdf`
+  - May contain outdated or different content
+  - **NOT** used for dimensional standards extraction
+  - Avoid using for table-related tasks
+
+- **Municode PDF**: `sources/bloomington/2026-02-21/municode/udo.pdf`
+  - Alternative source from Municode website
+  - Used for cross-reference but not primary extraction source
+
+### PDF Page Reference for Dimensional Standards
+Dimensional standards tables (02-2 through 02-23) are located at:
+- Pages: 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 57, 59, 61, 63, 65
+- Each page contains zoning district dimensional standards tables
+- Images for verification generated via `tools/pymupdf_table_benchmark.py`
+
+### Regenerating PDF Page Images
+When PDF page images appear incorrect or from wrong source:
+```bash
+python tools/pymupdf_table_benchmark.py \
+  --pdf "sources/bloomington/2026-02-21/city_pdf/udo.pdf" \
+  --out-dir "corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/pymupdf_benchmark" \
+  --pages 23,25,27,29,31,33,35,37,39,41,43,45,57,59,61,63,65
+node tools/copy_pdf_images.js
+```
+
 ## Troubleshooting
 
 ### Playwright browser missing
