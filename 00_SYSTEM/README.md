@@ -80,7 +80,60 @@ Phase 1: searchable text + manifest
 Phase 2 (current implemented slice): ADU-focused structured tables + retrieval/citation scoring  
 Phase 3: broader structured tables (all chapters/towns) + cross-reference graph + stale checks
 
+## Common Workflows
+
+### Updating Dimensional Standards Tables
+**When:** You have corrected OCR data (from manual review or better OCR) and need to update normalized tables
+
+**Quick Steps:**
+```bash
+# 1. Format your corrected data as markdown tables (see format below)
+# 2. Update normalized JSON files
+npx tsx src/update_dimensional_standards_from_ocr.ts
+
+# 3. Generate HTML from updated JSON
+npx tsx src/generate_html_from_normalized_json.ts
+
+# 4. Regenerate comparison page
+npx tsx src/build_dimensional_standards_comparison.ts
+
+# 5. Deploy to public directory (manual step)
+copy corpus\bloomington\2026-02-21\city_pdf\phase2_adu_tables\normalized\*.html public\bloomington\tables\
+```
+
+**Input Format (Markdown Tables):**
+```markdown
+## Table 02-2: R1 District Dimensional Standards
+
+### Lot Dimensions (Minimum, only for lots created after the effective date)
+
+| Label | Parameter | Value | Notes |
+|-------|-----------|-------|-------|
+| A | Lot area | 20,000 sq ft (0.459 acres) | See §20.04.110 (Incentives) for alternative standards |
+| B | Lot width | 100 ft | See §20.04.110 (Incentives) for alternative standards |
+
+### Building Setbacks (Minimum)
+
+| Label | Parameter | Value | Notes |
+|-------|-----------|-------|-------|
+| C | Front | 15 ft | |
+| D | Attached front-loading garage or carport | 25 ft | Or equal to the setback of the primary structure, whichever is greater |
+```
+
+**Important Notes:**
+- Each parameter gets its own row (no merged cells)
+- Values should be clean text (no [1] [2] markers)
+- Labels A-G are standardized across tables
+- Empty labels allowed for unlabeled parameters
+- Multi-part values use `<br>` for line breaks in HTML
+
+**File Locations:**
+- Source scripts: `src/`
+- Authoritative JSON: `corpus/<town>/<date>/<source>/phase2_adu_tables/normalized/`
+- Published HTML: `public/bloomington/tables/`
+- Data schema: `00_SYSTEM/docs/DATA_CONTRACTS.md` (see "Dimensional Standards Tables" section)
+
 ## Contribution norms
 - Preserve verbatim text exactly.
-- Keep all “inferred” content clearly labeled and separate.
+- Keep all "inferred" content clearly labeled and separate.
 - Always include source link, retrieval date, and page numbers.

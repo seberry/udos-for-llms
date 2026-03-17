@@ -23,6 +23,7 @@ interface NormalizedTable {
   table_title: string;
   pages: number[];
   normalized_at: string;
+  footnotes?: Record<string, string>;
   rows: NormalizedRow[];
 }
 
@@ -109,23 +110,70 @@ async function loadNormalizedTables(dir: string): Promise<Map<string, Normalized
   return tables;
 }
 
-function generateTableRows(rows: NormalizedRow[]): string {
-  return rows
-    .map((r) => {
-      const isNote = r.label === 'Notes';
-      const inferredClass = r.is_inferred ? 'inferred' : '';
-      
-      if (isNote) {
-        return `<tr class="notes-row"><td colspan="3">${esc(r.value)}</td></tr>`;
+function generateTableRows(rows: NormalizedRow[], tableRef: string, footnotes?: Record<string, string>): { rows: string, footnotesHtml: string } {
+  // Extract footnote markers from values
+  const footnoteMarkers = new Map<string, string>();
+  const footnoteRefs = new Set<string>();
+  
+  // Build footnote links HTML
+  const rowsHtml = rows.map((r) => {
+    const isNote = r.label === 'Notes';
+    const inferredClass = r.is_inferred ? 'inferred' : '';
+    
+    if (isNote) {
+      return `<tr class="notes-row"><td colspan="3">${esc(r.value)}</td></tr>`;
+    }
+    
+    // Find footnote markers in value (e.g., [1], [2], etc.)
+    let valueHtml = esc(r.value || '');
+    if (footnotes) {
+      const footnoteMatches = valueHtml.match(/\[(\d+)\]/g);
+      if (footnoteMatches) {
+        footnoteMatches.forEach(match => {
+          const num = match.match(/\d+/)?.[0] || '0';
+          const ref = `[${num}]`;
+          footnoteRefs.add(ref);
+          const linkId = `${tableRef}-fn${num}`;
+          const refId = `${tableRef}-ref${num}`;
+          valueHtml = valueHtml.replace(
+            match,
+            `<sup><a href="#${linkId}" id="${refId}" aria-label="Footnote ${num}">${match}</a></sup>`
+          );
+        });
       }
       
-      return `<tr>
-        <td class="label-cell">${esc(r.label || '')}</td>
-        <td class="parameter-cell">${esc(r.parameter || '')}</td>
-        <td class="value-cell ${inferredClass}">${esc(r.value || '')}</td>
-      </tr>`;
-    })
-    .join('\n');
+      footnoteMarkers.set(r.source_text, valueHtml);
+    }
+    
+    return `<tr>
+      <td class="label-cell">${esc(r.label || '')}</td>
+      <td class="parameter-cell">${esc(r.parameter || '')}</td>
+      <td class="value-cell ${inferredClass}">${valueHtml}</td>
+    </tr>`;
+  }).join('\n');
+  
+  // Generate footnotes section HTML if footnotes exist
+  let footnotesHtml = '';
+  if (footnotes && Object.keys(footnotes).length > 0) {
+    const sortedKeys = Object.keys(footnotes).sort((a, b) => {
+      const numA = parseInt(a.replace(/[^\d]/g, ''));
+      const numB = parseInt(b.replace(/[^\d]/g, ''));
+      return numA - numB;
+    });
+    
+    footnotesHtml = `\n    <div class="table-footnotes">\n      <strong>Notes:</strong>\n      <ol style="padding-left: 20px;">\n`;
+    
+    sortedKeys.forEach(key => {
+      const num = key.replace(/[^\d]/g, '');
+      const linkId = `${tableRef}-fn${num}`;
+      const refId = `${tableRef}-ref${num}`;
+      footnotesHtml += `        <li id="${linkId}">${esc(footnotes[key])} <a href="#${refId}" aria-label="Back to table">&#x21A9;</a></li>\n`;
+    });
+    
+    footnotesHtml += `      </ol>\n    </div>`;
+  }
+  
+  return { rows: rowsHtml, footnotesHtml };
 }
 
 async function main(): Promise<void> {
@@ -188,6 +236,10 @@ tr:hover{background:#f9fafb}
 .metadata strong{color:#1a1a1a}
 .warning{background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:12px 16px;margin-bottom:15px;color:#856404}
 .warning strong{color:#856404}
+.table-footnotes{margin-top:15px;padding:15px;background:#f9f9f9;border-left:4px solid #6b7280;font-size:0.9em}
+.table-footnotes strong{color:#1a1a1a}
+.table-footnotes a{color:#3b82f6;text-decoration:none}
+.table-footnotes a:hover{text-decoration:underline}
 @media (max-width:1200px){.split{grid-template-columns:1fr}}
 @media print{
   body{background:#fff}
@@ -219,7 +271,7 @@ ${sortedRefs.map(ref => {
   // Generate images for all pages this table spans
   const pages = Array.from({length: (block.page_end - block.page_start) + 1}, (_, i) => block.page_start + i);
   const imageHtml = pages.map(p => loadImageHtml(p, phase2Dir)).join('\n');
-  const rowsHtml = generateTableRows(table.rows);
+  const tableData = generateTableRows(table.rows, ref, table.footnotes);
   
   return `  <section id="${ref}">
     <h2>${esc(title)}</h2>
@@ -239,8 +291,9 @@ ${sortedRefs.map(ref => {
               <th>Value</th>
             </tr>
           </thead>
-          <tbody>${rowsHtml}</tbody>
+          <tbody>${tableData.rows}</tbody>
         </table>
+        ${tableData.footnotesHtml}
       </div>
     </div>
   </section>`;
