@@ -111,8 +111,6 @@ async function loadNormalizedTables(dir: string): Promise<Map<string, Normalized
 }
 
 function generateTableRows(rows: NormalizedRow[], tableRef: string, footnotes?: Record<string, string>): { rows: string, footnotesHtml: string } {
-  // Extract footnote markers from values
-  const footnoteMarkers = new Map<string, string>();
   const footnoteRefs = new Set<string>();
   
   // Build footnote links HTML
@@ -124,32 +122,38 @@ function generateTableRows(rows: NormalizedRow[], tableRef: string, footnotes?: 
       return `<tr class="notes-row"><td colspan="3">${esc(r.value)}</td></tr>`;
     }
     
-    // Find footnote markers in value (e.g., [1], [2], etc.)
+    // Build value HTML from value field and add notes if they exist
     let valueHtml = esc(r.value || '');
-    if (footnotes) {
-      const footnoteMatches = valueHtml.match(/\[(\d+)\]/g);
+    let notesHtml = '';
+    
+    // Parse footnotes from both value and notes fields
+    if (footnotes && r.notes) {
+      // Display notes in a separate row below the value
+      notesHtml = `<tr><td colspan="3" class="value-cell ${inferredClass}" style="font-style: italic; font-size: 0.9em; background: #fffbeb; padding: 8px;">${esc(r.notes)}</td></tr>`;
+      
+      // Find footnote markers in notes and link them
+      const footnoteMatches = r.notes.match(/\[(\d+)\]/g);
       if (footnoteMatches) {
-        footnoteMatches.forEach(match => {
+        const sortedMatches = [...new Set(footnoteMatches)]; // Remove duplicates
+        const refsHtml = sortedMatches.map(match => {
           const num = match.match(/\d+/)?.[0] || '0';
           const ref = `[${num}]`;
           footnoteRefs.add(ref);
           const linkId = `${tableRef}-fn${num}`;
           const refId = `${tableRef}-ref${num}`;
-          valueHtml = valueHtml.replace(
-            match,
-            `<sup><a href="#${linkId}" id="${refId}" aria-label="Footnote ${num}">${match}</a></sup>`
-          );
-        });
+          return `<sup><a href="#${linkId}" id="${refId}" aria-label="Footnote ${num}">${ref}</a></sup>`;
+        }).join(' ');
+        
+        // Append footnote references to the value
+        valueHtml = `${valueHtml} ${refsHtml}`;
       }
-      
-      footnoteMarkers.set(r.source_text, valueHtml);
     }
     
     return `<tr>
       <td class="label-cell">${esc(r.label || '')}</td>
       <td class="parameter-cell">${esc(r.parameter || '')}</td>
       <td class="value-cell ${inferredClass}">${valueHtml}</td>
-    </tr>`;
+    </tr>${notesHtml}`;
   }).join('\n');
   
   // Generate footnotes section HTML if footnotes exist
