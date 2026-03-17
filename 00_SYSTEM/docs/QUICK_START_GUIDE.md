@@ -15,13 +15,22 @@ Get started quickly with the right documentation for your task.
 
 **Quick steps:**
 ```bash
-npx tsx src/update_dimensional_standards_from_ocr.ts
+# Step 0: Get OCR from https://ocr.z.ai/ if needed (for complex tables)
+# Upload PDF → Download markdown → Save as table_XX-XX.md in external_ocr/
+
 npx tsx src/generate_html_from_normalized_json.ts
 npx tsx src/build_dimensional_standards_comparison.ts
 copy corpus\bloomington\...\*.html public\bloomington\tables\
 ```
 
+**Verification workflow:**
+1. Open `public/bloomington/tables/dimensional_standards_comparison.html`
+2. Compare PDF images (left) with OCR-rendered tables (right, blue sections)
+3. Toggle to structured data (green sections) to verify JSON accuracy
+4. Click cells to copy values for debugging
+
 **Having issues?** `00_SYSTEM/docs/TABLE_UPDATE_TROUBLESHOOTING.md`
+**Need OCR guidance?** `00_SYSTEM/docs/TABLE_EXTRACTION_NOTES.md` → "OCR-Based Table Verification"
 
 ### I need to understand the data schema
 **Read:** `00_SYSTEM/docs/DATA_CONTRACTS.md`

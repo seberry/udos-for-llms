@@ -74,6 +74,16 @@ UDOsforLLMs/
 - `adu_tables.json` - ADU-relevant tables
 - `normalized/` - Normalized table data
   - `target_tables_verification_manifest.json` - Verification status
+- `external_ocr/` - OCR-rendered markdown tables
+  - `table_02-2.md` - OCR output for dimensional standards
+  - `table_02-3.md` - etc.
+  
+**Purpose of external_ocr/:**
+- Stores OCR-rendered tables from external OCR services (e.g., https://ocr.z.ai/)
+- Used for verification of complex dimensional standards tables
+- Automatically integrated into HTML generation and comparison pages
+- Naming convention: `table_XX-XX.md` (must match table reference)
+- **Critical**: Files must have `table_` prefix for pattern matching to work
 
 ## Source PDFs
 

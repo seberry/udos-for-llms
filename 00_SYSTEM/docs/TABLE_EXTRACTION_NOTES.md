@@ -69,6 +69,97 @@
   - `UDO city_pdf 2026-02-21, Table 04-10, page 178, source row 24`
 - Do not rely on implicit reconstruction at answer time when exact citation is possible.
 
+## OCR-Based Table Verification
+
+For dimensional standards tables, we use external OCR services to improve accuracy and provide human verification workflow.
+
+### Recommended OCR Service
+**Service**: https://ocr.z.ai/ (free)
+
+**Why OCR.z.ai?**
+- Better accuracy than automated PDF extraction for complex tables
+- Produces clean markdown output with preserved table structure
+- Free to use with no account required
+- Handles merged cells and multi-level headers well
+
+### OCR Workflow
+
+1. **Extract OCR from PDF**
+   - Upload PDF page(s) to https://ocr.z.ai/
+   - Download the markdown output
+   - Format as markdown table with proper headers
+
+2. **Save OCR File**
+   - Naming convention: `table_XX-XX.md` (e.g., `table_02-2.md`)
+   - Location: `corpus/bloomington/<YYYY-MM-DD>/city_pdf/phase2_adu_tables/external_ocr/`
+   - **Important**: Use `table_` prefix - scripts use pattern matching to find files
+
+3. **Generate HTML**
+   ```bash
+   npx tsx src/generate_html_from_normalized_json.ts
+   ```
+   - Script automatically includes OCR tables when files exist
+   - Generates HTML with three views: OCR (default), Structured, and PDF comparison
+
+4. **Build Comparison Page**
+   ```bash
+   npx tsx src/build_dimensional_standards_comparison.ts
+   ```
+   - Creates side-by-side comparison: PDF images, OCR rendering, structured data
+   - Toggle between views for verification
+
+### Verification Process
+
+The comparison page provides a single-panel review experience:
+- **Left side**: PDF page images (source truth)
+- **Right side**: OCR-rendered table (default) or structured data (toggle)
+- **Blue sections**: OCR tables with original formatting preserved
+- **Green sections**: Structured JSON data with inferred values highlighted
+- **Click-to-copy**: Structured data cells are clickable to copy values
+
+### When to Use OCR
+
+**Use OCR for:**
+- Dimensional standards tables (Chapter 20, Tables 02-2 through 02-23)
+- Tables with complex layouts (merged cells, multi-level headers)
+- Tables where automated extraction produces errors
+- Tables requiring human verification before use
+
+**May not need OCR for:**
+- Simple single-row tables
+- Tables already accurately extracted
+- Tables without human review requirements
+
+### OCR File Format Example
+
+```markdown
+## (2) Dimensional Standards
+
+The following table is a summary of the district-specific dimensional standards.
+
+<div align="center">
+Table 02-2: R1 District Dimensional Standards
+</div>
+
+<table border="1">
+<tr><td colspan="3">Lot Dimensions (Minimum, only for lots created after the effective date)</td></tr>
+<tr><td>A</td><td>Lot area</td><td>20,000 square feet (0.459 acres)[1]</td></tr>
+...
+</table>
+
+Notes:
+[1] See Section 20.04.110 (Incentives) for alternative standards.
+```
+
+### Integration with Automated Pipeline
+
+OCR files complement automated extraction:
+1. PyMuPDF/automated extraction provides baseline JSON
+2. OCR files provide human-verified reference
+3. Comparison page shows both for quality control
+4. Structured data used for programmatic access
+5. OCR used for verification when accuracy is critical
+
 ## Pattern registry (formatting conventions)
 - Track recurring formatting conventions and inference rules in:
   - `00_SYSTEM/docs/NORMALIZATION_STYLE_PATTERNS.md`
