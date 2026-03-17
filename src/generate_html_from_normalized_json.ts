@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { resolveFromCwd } from './utils/fs.js';
 
 interface NormalizedRow {
   source_row_index: number;
@@ -22,8 +23,54 @@ interface NormalizedTable {
   rows: NormalizedRow[];
 }
 
-function generateHtml(normalizedTable: NormalizedTable, townSlug: string, sourceType: string, snapshotDate: string): string {
+function extractOcrTableHtml(ocrPath: string): string | null {
+  if (!fs.existsSync(ocrPath)) {
+    return null;
+  }
+  
+  const ocrContent = fs.readFileSync(ocrPath, 'utf-8');
+  
+  // Extract the table HTML - look for <table border="1">
+  const tableMatch = ocrContent.match(/<table[^>]*>[\s\S]*?<\/table>/);
+  if (!tableMatch) {
+    return null;
+  }
+  
+  const tableHtml = tableMatch[0];
+  
+  // Extract title
+  const titleMatch = ocrContent.match(/Table \d+-(\d+):[^\n]+/);
+  const title = titleMatch ? titleMatch[0] : 'OCR Table';
+  
+  // Extract notes
+  const notesMatch = ocrContent.match(/Notes:([\s\S]*?)(?=<div[^>]*>Figure|$)/);
+  const notes = notesMatch ? notesMatch[1].trim() : null;
+  
+  return `
+    <div class="ocr-section">
+      <div class="section-header">
+        <h2>OCR-Rendered Table (Default View)</h2>
+        <button class="toggle-btn" onclick="toggleView('structured')">View Structured Data</button>
+      </div>
+      <div id="ocr-view" class="view-section active">
+        <div class="ocr-table-container">
+          <h3>${title}</h3>
+          <div class="ocr-table-wrapper">
+            ${tableHtml}
+          </div>
+          ${notes ? `<div class="ocr-notes"><strong>Notes:</strong>${notes}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateHtml(normalizedTable: NormalizedTable, townSlug: string, sourceType: string, snapshotDate: string, ocrDir: string): string {
   const { table_ref, table_title, pages, rows, normalized_at } = normalizedTable;
+  
+  // Check for OCR file - use provided ocrDir (files have "table_" prefix)
+  const ocrPath = path.join(ocrDir, `table_${table_ref}.md`);
+  const ocrHtml = extractOcrTableHtml(ocrPath);
   
   let html = `<!DOCTYPE html>
 <html lang="en">
@@ -56,6 +103,105 @@ function generateHtml(normalizedTable: NormalizedTable, townSlug: string, source
       margin: 5px 0;
       color: #4b5563;
     }
+    
+    /* OCR Section Styles */
+    .ocr-section {
+      background: #ffffff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .section-header h2 {
+      margin: 0;
+      color: #1e40af;
+      font-size: 1.3em;
+    }
+    .toggle-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover {
+      background: #2563eb;
+    }
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+    }
+    .ocr-table-container {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 15px;
+    }
+    .ocr-table-container h3 {
+      margin-top: 0;
+      color: #1e40af;
+      font-size: 1.1em;
+    }
+    .ocr-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: white;
+    }
+    .ocr-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .ocr-table-wrapper table td {
+      border: 1px solid #94a3b8;
+      padding: 10px;
+      vertical-align: top;
+    }
+    .ocr-table-wrapper table td[colspan="3"] {
+      background: #f1f5f9;
+      font-weight: 600;
+      text-align: center;
+    }
+    .ocr-notes {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      border-radius: 2px;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+    }
+    
+    /* Structured Data Section */
+    .structured-section {
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .structured-section .section-header h2 {
+      color: #065f46;
+    }
+    .structured-section .toggle-btn {
+      background: #10b981;
+    }
+    .structured-section .toggle-btn:hover {
+      background: #059669;
+    }
+    
     table {
       border-collapse: collapse;
       width: 100%;
@@ -120,15 +266,23 @@ function generateHtml(normalizedTable: NormalizedTable, townSlug: string, source
     <p><strong>Source:</strong> ${sourceType} ${snapshotDate}</p>
   </div>
   
-  <table>
-    <thead>
-      <tr>
-        <th>Label</th>
-        <th>Parameter</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
+  ${ocrHtml ? ocrHtml : ''}
+  
+  <div class="structured-section">
+    <div class="section-header">
+      <h2>Structured Data (JSON-Derived)</h2>
+      ${ocrHtml ? '<button class="toggle-btn" onclick="toggleView(\'ocr\')">View OCR Table</button>' : ''}
+    </div>
+    <div id="structured-view" class="view-section ${!ocrHtml ? 'active' : ''}">
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Parameter</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
 `;
   
   for (const row of rows) {
@@ -153,11 +307,26 @@ function generateHtml(normalizedTable: NormalizedTable, townSlug: string, source
   }
   
   html += `    </tbody>
-  </table>
+      </table>
+    </div>
+  </div>
   
   <script>
-    // Add click-to-copy functionality
-    document.querySelectorAll('td').forEach(cell => {
+    function toggleView(view) {
+      const ocrView = document.getElementById('ocr-view');
+      const structuredView = document.getElementById('structured-view');
+      
+      if (view === 'structured') {
+        ocrView.classList.remove('active');
+        structuredView.classList.add('active');
+      } else {
+        ocrView.classList.add('active');
+        structuredView.classList.remove('active');
+      }
+    }
+    
+    // Add click-to-copy functionality for structured table
+    document.querySelectorAll('#structured-view td').forEach(cell => {
       cell.style.cursor = 'pointer';
       cell.title = 'Click to copy';
       cell.addEventListener('click', () => {
@@ -177,6 +346,7 @@ function generateHtml(normalizedTable: NormalizedTable, townSlug: string, source
 
 function main() {
   const basePath = 'corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/normalized';
+  const ocrDir = 'corpus/bloomington/2026-02-21/city_pdf/phase2_adu_tables/external_ocr';
   const townSlug = 'bloomington';
   const sourceType = 'city_pdf';
   const snapshotDate = '2026-02-21';
@@ -189,6 +359,7 @@ function main() {
   
   let processed = 0;
   let errors = 0;
+  let withOcr = 0;
   
   for (const jsonFile of jsonFiles) {
     try {
@@ -196,13 +367,18 @@ function main() {
       const content = fs.readFileSync(jsonPath, 'utf-8');
       const normalized = JSON.parse(content) as NormalizedTable;
       
-      const html = generateHtml(normalized, townSlug, sourceType, snapshotDate);
+      const html = generateHtml(normalized, townSlug, sourceType, snapshotDate, ocrDir);
       
       const htmlFile = jsonFile.replace('.json', '.html');
       const htmlPath = path.join(basePath, htmlFile);
       fs.writeFileSync(htmlPath, html, 'utf-8');
       
-      console.log(`✓ Generated ${htmlFile} (${normalized.rows.length} rows)`);
+      const tableRef = normalized.table_ref;
+      const ocrPath = path.join(ocrDir, `table_${tableRef}.md`);
+      const ocrExists = fs.existsSync(ocrPath);
+      if (ocrExists) withOcr++;
+      
+      console.log(`✓ Generated ${htmlFile} (${normalized.rows.length} rows)${ocrExists ? ' [with OCR]' : ''}`);
       processed++;
     } catch (error) {
       console.error(`✗ Error processing ${jsonFile}: ${error}`);
@@ -212,6 +388,7 @@ function main() {
   
   console.log(`\n=== Summary ===`);
   console.log(`Processed: ${processed} files`);
+  console.log(`With OCR: ${withOcr} files`);
   console.log(`Errors: ${errors}`);
   
   if (errors > 0) {

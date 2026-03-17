@@ -29,6 +29,105 @@
       margin: 5px 0;
       color: #4b5563;
     }
+    
+    /* OCR Section Styles */
+    .ocr-section {
+      background: #ffffff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .section-header h2 {
+      margin: 0;
+      color: #1e40af;
+      font-size: 1.3em;
+    }
+    .toggle-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover {
+      background: #2563eb;
+    }
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+    }
+    .ocr-table-container {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 15px;
+    }
+    .ocr-table-container h3 {
+      margin-top: 0;
+      color: #1e40af;
+      font-size: 1.1em;
+    }
+    .ocr-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: white;
+    }
+    .ocr-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .ocr-table-wrapper table td {
+      border: 1px solid #94a3b8;
+      padding: 10px;
+      vertical-align: top;
+    }
+    .ocr-table-wrapper table td[colspan="3"] {
+      background: #f1f5f9;
+      font-weight: 600;
+      text-align: center;
+    }
+    .ocr-notes {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      border-radius: 2px;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+    }
+    
+    /* Structured Data Section */
+    .structured-section {
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .structured-section .section-header h2 {
+      color: #065f46;
+    }
+    .structured-section .toggle-btn {
+      background: #10b981;
+    }
+    .structured-section .toggle-btn:hover {
+      background: #059669;
+    }
+    
     table {
       border-collapse: collapse;
       width: 100%;
@@ -89,19 +188,55 @@
   <div class="metadata">
     <p><strong>Table Ref:</strong> 02-4</p>
     <p><strong>Pages:</strong> 27, 27</p>
-    <p><strong>Normalized:</strong> 2026-03-17T00:22:16.903Z</p>
+    <p><strong>Normalized:</strong> 2026-03-17T02:04:00.000Z</p>
     <p><strong>Source:</strong> city_pdf 2026-02-21</p>
   </div>
   
-  <table>
-    <thead>
-      <tr>
-        <th>Label</th>
-        <th>Parameter</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
+  
+    <div class="ocr-section">
+      <div class="section-header">
+        <h2>OCR-Rendered Table (Default View)</h2>
+        <button class="toggle-btn" onclick="toggleView('structured')">View Structured Data</button>
+      </div>
+      <div id="ocr-view" class="view-section active">
+        <div class="ocr-table-container">
+          <h3>Table 02-4: R3 District Dimensional Standards</h3>
+          <div class="ocr-table-wrapper">
+            <table border="1"><tr><td colspan="3">Lot Dimensions (Minimum, only for lots created after the effective date)</td></tr><tr><td>A</td><td>Lot area</td><td>5,000 square feet (0.115 acres) [1]</td></tr><tr><td>B</td><td>Lot width</td><td>50 feet [1]</td></tr><tr><td colspan="3">Building Setbacks (Minimum)</td></tr><tr><td>C</td><td>Front build-to line</td><td>15 feet or the median front setback of abutting residential structures, whichever is less.</td></tr><tr><td></td><td>Attached front-loading garage or carport</td><td>10 feet behind the primary structure&#x27;s front building wall</td></tr><tr><td>D</td><td>Side</td><td>First floor: 6 feet [2] [3]Each story above the ground floor: 10 feet [1] [2] [3]</td></tr><tr><td>E</td><td>Rear</td><td>25 feet [1] [3]</td></tr><tr><td colspan="3">Other Standards</td></tr><tr><td></td><td>Impervious surface coverage (maximum)</td><td>45%</td></tr><tr><td>F</td><td>Primary structure height (maximum)</td><td>35 feet</td></tr><tr><td></td><td>Accessory structure height (maximum)</td><td>20 feet</td></tr></table>
+          </div>
+          <div class="ocr-notes"><strong>Notes:</strong>[1] See Section 20.04.110 (Incentives) for alternative standards.
+
+[2] Legally established lots of record that are less than the minimum lot width may reduce the required setback up to 2 feet.
+
+[3] Side primary building setbacks shall be reduced by 2 feet if adjacent to a platted alley. Rear primary building setbacks shall be reduced by 10 feet if adjacent to a platted alley.
+
+<div style='text-align: center;'><img src='https://maas-watermark-prod-new.cn-wlcb.ufileos.com/ocr%2Fcrop%2F2026031710473066fb91dbd8e64101%2Fcrop_1_1773715658354.png?UCloudPublicKey=TOKEN_6df395df-5d8c-4f69-90f8-a4fe46088958&Signature=9mxFjHSG6MH2HFKYT1zrN%2Fg0%2B3E%3D&Expires=1774320458' alt='OCR图片'/></div>
+
+<div align="center">
+
+Figure 6: R3 Dimensional Standards
+
+</div></div>
+        </div>
+      </div>
+    </div>
+  
+  
+  <div class="structured-section">
+    <div class="section-header">
+      <h2>Structured Data (JSON-Derived)</h2>
+      <button class="toggle-btn" onclick="toggleView('ocr')">View OCR Table</button>
+    </div>
+    <div id="structured-view" class="view-section ">
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Parameter</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
       <tr class=" ">
         <td class="label-cell">A</td>
         <td class="parameter-cell">Lot area</td>
@@ -153,11 +288,26 @@
         <td class="value-cell">20 ft</td>
       </tr>
     </tbody>
-  </table>
+      </table>
+    </div>
+  </div>
   
   <script>
-    // Add click-to-copy functionality
-    document.querySelectorAll('td').forEach(cell => {
+    function toggleView(view) {
+      const ocrView = document.getElementById('ocr-view');
+      const structuredView = document.getElementById('structured-view');
+      
+      if (view === 'structured') {
+        ocrView.classList.remove('active');
+        structuredView.classList.add('active');
+      } else {
+        ocrView.classList.add('active');
+        structuredView.classList.remove('active');
+      }
+    }
+    
+    // Add click-to-copy functionality for structured table
+    document.querySelectorAll('#structured-view td').forEach(cell => {
       cell.style.cursor = 'pointer';
       cell.title = 'Click to copy';
       cell.addEventListener('click', () => {

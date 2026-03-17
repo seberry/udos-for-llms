@@ -29,6 +29,105 @@
       margin: 5px 0;
       color: #4b5563;
     }
+    
+    /* OCR Section Styles */
+    .ocr-section {
+      background: #ffffff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .section-header h2 {
+      margin: 0;
+      color: #1e40af;
+      font-size: 1.3em;
+    }
+    .toggle-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover {
+      background: #2563eb;
+    }
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+    }
+    .ocr-table-container {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 15px;
+    }
+    .ocr-table-container h3 {
+      margin-top: 0;
+      color: #1e40af;
+      font-size: 1.1em;
+    }
+    .ocr-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: white;
+    }
+    .ocr-table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .ocr-table-wrapper table td {
+      border: 1px solid #94a3b8;
+      padding: 10px;
+      vertical-align: top;
+    }
+    .ocr-table-wrapper table td[colspan="3"] {
+      background: #f1f5f9;
+      font-weight: 600;
+      text-align: center;
+    }
+    .ocr-notes {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      border-radius: 2px;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+    }
+    
+    /* Structured Data Section */
+    .structured-section {
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .structured-section .section-header h2 {
+      color: #065f46;
+    }
+    .structured-section .toggle-btn {
+      background: #10b981;
+    }
+    .structured-section .toggle-btn:hover {
+      background: #059669;
+    }
+    
     table {
       border-collapse: collapse;
       width: 100%;
@@ -89,19 +188,57 @@
   <div class="metadata">
     <p><strong>Table Ref:</strong> 02-14</p>
     <p><strong>Pages:</strong> 47, 47</p>
-    <p><strong>Normalized:</strong> 2026-03-17T00:22:16.898Z</p>
+    <p><strong>Normalized:</strong> 2026-03-17T02:12:00.000Z</p>
     <p><strong>Source:</strong> city_pdf 2026-02-21</p>
   </div>
   
-  <table>
-    <thead>
-      <tr>
-        <th>Label</th>
-        <th>Parameter</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
+  
+    <div class="ocr-section">
+      <div class="section-header">
+        <h2>OCR-Rendered Table (Default View)</h2>
+        <button class="toggle-btn" onclick="toggleView('structured')">View Structured Data</button>
+      </div>
+      <div id="ocr-view" class="view-section active">
+        <div class="ocr-table-container">
+          <h3>Table 02-19: MD-DG Dimensional Standards</h3>
+          <div class="ocr-table-wrapper">
+            <table border="1"><tr><td colspan="3">Building Setbacks</td></tr><tr><td>A</td><td>Build-to range</td><td>0 to 15 feet</td></tr><tr><td>B</td><td>Building facade build-to percentage (minimum)</td><td>70%</td></tr><tr><td>C</td><td>Side (minimum)</td><td>5 feet [1]</td></tr><tr><td>D</td><td>Rear (minimum)</td><td>5 feet [1]</td></tr><tr><td colspan="3">Other Standards</td></tr><tr><td rowspan="5"></td><td>Front parking setback (minimum)</td><td>20 feet behind the primary structure&#x27;s front building wall</td></tr><tr><td>Side and Rear parking setback (minimum)</td><td>Requirements set per Section 20.04.080(h)(1)(A)(ii)</td></tr><tr><td>Impervious surface coverage (maximum)</td><td>75%</td></tr><tr><td>Landscape area (minimum)</td><td>25%</td></tr><tr><td rowspan="3">E</td><td>Primary structure height (maximum)</td><td>3 stories, not to exceed 40 feet [1] [2] [3] [4]</td></tr><tr><td>Primary Structure height (minimum)</td><td>25 feet</td></tr><tr><td>Accessory structure height (maximum)</td><td>30 feet</td></tr></table>
+          </div>
+          <div class="ocr-notes"><strong>Notes:</strong>[1] Buildings abutting a property in the R1, R2, R3, or R4 zoning district shall comply with the standards in Section 20.04.070(d)(5) (Neighborhood Transition Standards).
+
+[2] Where a nonresidential use is proposed on the ground floor, the minimum floor to ceiling height on the ground floor shall be 12 feet.
+
+[3] See Section 20.04.110 (Incentives) for alternative standards.
+
+[4] Buildings that include one or more dwelling units that meet the definition of "Student Housing or Dormitory" shall be subject to the maximum building heights established in Section 20.03.030(b)(12) (Student Housing or Dormitory).
+
+<div style='text-align: center;'><img src='https://maas-watermark-prod-new.cn-wlcb.ufileos.com/ocr%2Fcrop%2F20260317105205e35527096244406d%2Fcrop_1_1773715933963.png?UCloudPublicKey=TOKEN_6df395df-5d8c-4f69-90f8-a4fe46088958&Signature=2DLAy6jqJiFBV4X%2FtUqrYqmhoM0%3D&Expires=1774320733' alt='OCR图片'/></div>
+
+<div align="center">
+
+Figure 36: MD-DG Downtown Character Overlay Dimensional Standards
+
+</div></div>
+        </div>
+      </div>
+    </div>
+  
+  
+  <div class="structured-section">
+    <div class="section-header">
+      <h2>Structured Data (JSON-Derived)</h2>
+      <button class="toggle-btn" onclick="toggleView('ocr')">View OCR Table</button>
+    </div>
+    <div id="structured-view" class="view-section ">
+      <table>
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Parameter</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
       <tr class=" ">
         <td class="label-cell">A</td>
         <td class="parameter-cell">Lot area</td>
@@ -153,11 +290,26 @@
         <td class="value-cell">30 ft</td>
       </tr>
     </tbody>
-  </table>
+      </table>
+    </div>
+  </div>
   
   <script>
-    // Add click-to-copy functionality
-    document.querySelectorAll('td').forEach(cell => {
+    function toggleView(view) {
+      const ocrView = document.getElementById('ocr-view');
+      const structuredView = document.getElementById('structured-view');
+      
+      if (view === 'structured') {
+        ocrView.classList.remove('active');
+        structuredView.classList.add('active');
+      } else {
+        ocrView.classList.add('active');
+        structuredView.classList.remove('active');
+      }
+    }
+    
+    // Add click-to-copy functionality for structured table
+    document.querySelectorAll('#structured-view td').forEach(cell => {
       cell.style.cursor = 'pointer';
       cell.title = 'Click to copy';
       cell.addEventListener('click', () => {
